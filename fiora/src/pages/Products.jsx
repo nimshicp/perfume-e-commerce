@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Search, Menu } from "lucide-react";
 import axios from "axios";
+import ProductCard from "../components/productCard";
+import { useLocation } from "react-router-dom";
 
 function Products() {
+  const location = useLocation();
+  const categoryProp = location.state?.category;
+
   const [search, setSearch] = useState("");
   const [product, setProduct] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [noResult,setNoResult] = useState(false)
 
   useEffect(() => {
     const FetchProducts = async () => {
@@ -14,7 +20,15 @@ function Products() {
         setLoading(true);
         const res = await axios.get("http://localhost:5000/products");
         setProduct(res.data);
-        setFilteredProducts(res.data);
+
+        if (categoryProp) {
+          setFilteredProducts(
+            res.data.filter((p) => p.category === categoryProp)
+          );
+        } else {
+          setFilteredProducts(res.data);
+        }
+
         setLoading(false);
       } catch {
         console.log("error");
@@ -23,13 +37,35 @@ function Products() {
       }
     };
     FetchProducts();
-  }, []);
+  }, [categoryProp]);
 
-  useEffect(() => {
-    if (search.trim() === "") {
-      setFilteredProducts(product);
-    }
-  }, [search, product]);
+  const handleSearch = () => {
+
+let temp = [...product];
+
+if (categoryProp){
+  temp = temp.filter((p) => p.category === categoryProp)
+}
+
+if (search.trim() === "")
+{
+  setFilteredProducts(temp)
+  setNoResult(false);
+  return
+}
+
+const searched = temp.filter( (p) => p.name.toLowerCase().includes(search.toLowerCase()))
+
+if(searched.length === 0){
+  setFilteredProducts([])
+    setNoResult(true)
+  
+}else{
+  setFilteredProducts(searched)
+  setNoResult(false)
+}
+
+  };
 
   if (loading) {
     return (
@@ -61,42 +97,30 @@ function Products() {
             />
           </div>
 
-          <button className="bg-pink-400 hover:bg-pink-500 text-white p-2 rounded">
+          <button
+            className="bg-pink-400 hover:bg-pink-500 text-white p-2 rounded"
+            onClick={handleSearch}
+          >
             <Search size={20} />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<div className="p-4">
+{
+  noResult ? <h2>No product found</h2>:
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
         {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            {" "}
-            <div>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="font-semibold text-lg text-gray-800 mb-2">
-                {product.name}
-              </h3>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-gray-900">
-                  ${product.price}
-                </span>
-                <span className="px-2 py-1 rounded-full text-xs font-medium text-white">
-                  {product.category}
-                </span>
-              </div>
-            </div>
-          </div>
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
+
+  
+}
+
+</div>
+
+      
     </>
   );
 }

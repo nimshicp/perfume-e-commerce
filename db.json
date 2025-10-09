@@ -13,56 +13,64 @@
       "name": "Rose Elegance",
       "price": 89.99,
       "image": "https://images.pexels.com/photos/1961791/pexels-photo-1961791.jpeg",
-      "category": "women"
+      "category": "women",
+      "description": "A delicate and romantic fragrance featuring notes of Bulgarian rose, peony, and white musk. Perfect for special occasions and evening wear."
     },
     {
       "id": "2",
       "name": "Noir Mystique",
       "price": 79.99,
       "image": "https://images.pexels.com/photos/13882813/pexels-photo-13882813.jpeg",
-      "category": "men"
+      "category": "men",
+      "description": "A bold and mysterious scent with dark amber, leather, and sandalwood notes. Ideal for the modern gentleman who commands attention."
     },
     {
       "id": "3",
       "name": "Universal Harmony",
       "price": 95.99,
       "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
-      "category": "unisex"
+      "category": "unisex",
+      "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion."
     },
     {
       "id": "4",
       "name": "Vanilla Dream",
       "price": 75.99,
       "image": "https://images.pexels.com/photos/28843743/pexels-photo-28843743.jpeg",
-      "category": "women"
+      "category": "women",
+      "description": "Sweet and comforting fragrance with Madagascar vanilla, tonka bean, and soft floral undertones. Like a warm embrace in a bottle."
     },
     {
       "id": "5",
       "name": "Ocean Breeze",
       "price": 82.99,
-      "image": "https://images.unsplash.com/photo-1595425877381-1d8ae76f5f78?w=400",
-      "category": "men"
+      "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=853&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "category": "men",
+      "description": "Fresh aquatic scent with sea salt, bergamot, and marine notes. Evokes the crisp, clean air of coastal mornings."
     },
     {
       "id": "6",
       "name": "Citrus Fusion",
       "price": 68.99,
       "image": "https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "category": "unisex"
+      "category": "unisex",
+      "description": "Energetic blend of grapefruit, lemon, and orange with a hint of green tea. Perfect for daily wear and uplifting your mood."
     },
     {
       "id": "7",
       "name": "Midnight Bloom",
       "price": 99.99,
       "image": "https://images.unsplash.com/photo-1593487568720-92097fb460fb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "category": "women"
+      "category": "women",
+      "description": "An intoxicating evening fragrance with jasmine, gardenia, and dark patchouli. For the woman who embraces her sensual side."
     },
     {
       "id": "8",
       "name": "Leather & Oak",
       "price": 88.99,
       "image": "https://images.unsplash.com/photo-1593487568720-92097fb460fb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "category": "men"
+      "category": "men",
+      "description": "Robust and sophisticated scent combining aged leather, oakwood, and subtle tobacco notes. Timeless elegance for the discerning man."
     }
   ]
 }

@@ -48,9 +48,7 @@ const Footer = () => {
               placeholder="Your email"
               className="w-full px-3 py-2 rounded-l-lg text-gray-900 focus:outline-none"
             />
-            <button className="bg-pink-600 hover:bg-pink-700 px-4 py-2 rounded-r-lg text-white font-semibold">
-              Subscribe
-            </button>
+            
           </form>
           <div className="flex space-x-4 mt-4">
             <a href="#" className="hover:text-pink-400"><Facebook size={20} /></a>

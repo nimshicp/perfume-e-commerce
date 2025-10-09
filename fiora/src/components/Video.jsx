@@ -1,6 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Video = () => {
+
+const navigate = useNavigate()
+
+const handleCategory=(category)=>{
+navigate("/products",{state:{category}});
+}
+
   return (
     <div className="relative h-screen overflow-hidden">
   
@@ -30,10 +38,10 @@ const Video = () => {
             Exclusively Available Online
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-black px-6 py-3 md:px-8 md:py-4 font-semibold text-sm md:text-lg hover:bg-pink-300 hover:text-white transition-colors duration-300 rounded-2xl">
+            <button className="bg-white text-black px-6 py-3 md:px-8 md:py-4 font-semibold text-sm md:text-lg hover:bg-pink-300 hover:text-white transition-colors duration-300 rounded-2xl" onClick={() => handleCategory("women")}>
               SHOP WOMEN
             </button>
-            <button className="border-2 border- text-gray-500 px-6 py-3 md:px-8 md:py-4 font-semibold text-sm md:text-lg hover:bg-pink-300 hover:text-white hover:border-pink-300 transition-colors duration-300 rounded-2xl">
+            <button className="border-2 border- text-gray-500 px-6 py-3 md:px-8 md:py-4 font-semibold text-sm md:text-lg hover:bg-pink-300 hover:text-white hover:border-pink-300 transition-colors duration-300 rounded-2xl" onClick={() => handleCategory("men")}>
               SHOP MEN
             </button>
           </div>
