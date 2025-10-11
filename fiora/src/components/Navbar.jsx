@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingCart, Heart } from "lucide-react";
 import { useUser } from "../context/userContext";
-import { useCart } from "../context/CartContext";
+import { useShop } from "../context/ShopContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const { totalItems } = useCart();
+  const { cartItemsCount,wishlist } = useShop();
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm">
@@ -37,34 +36,36 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button className="text-gray-600 hover:text-gray-900 transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </button>
+            {user && (
+              <div className="relative">
+                <button
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  onClick={() => navigate("/wishlist")}
+                >
+                  <Heart className="h-6 w-6" />
+                </button>
+                {wishlist.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {wishlist.length}
+                  </span>
+                )}
+              </div>
+            )}
 
-            <div
-              className="relative cursor-pointer"
-              onClick={() => navigate("/cart")}
-            >
-              <ShoppingCart size={24} />
-              {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </div>
+            {user && (
+              <div
+                className="relative cursor-pointer"
+                onClick={() => navigate("/cart")}
+              >
+                <ShoppingCart size={24} />
+
+                {cartItemsCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemsCount}
+                  </span>
+                )}
+              </div>
+            )}
 
             {user ? (
               <>

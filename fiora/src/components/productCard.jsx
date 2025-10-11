@@ -1,22 +1,50 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+import { useUser } from "../context/userContext";
+import axios from "axios";
+import { Heart } from "lucide-react";
+import { useShop } from "../context/ShopContext";
 
-function ProductCard({ product, onAddToCart, onAddToWishlist }) {
+function ProductCard({ product }) {
   const navigate = useNavigate();
+  const{addToWishList,removeFromWishList,isWishList,addToCart}=useShop()
+  const {user} = useUser()
+
+
+const isWishListed = isWishList(product.id)
+
+  
   const handleClick = () => {
     navigate(`/products/${product.id}`, { state: { product } });
   };
-const {AddToCart}=useCart()
 
-  const handleAddToCart=(e)=>
-{
-AddToCart(product,1)
-alert (`${product.name} added to cart`)
+
+const ToggleEffect = async () => {
+if(!user) {
+  alert("please login to save items")
+  return
 }
+try{
+if(isWishListed){
+  return  await removeFromWishList(product.id)
+}else{
+  return await addToWishList(product)
+}
+
+}catch(err){
+  alert("failed to update wishlist")
+
+}
+
+}
+
+
+
+
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col cursor-pointer"  >
-      <div className="relative" onClick={handleClick}>
+      <div className="relative">
         <img
           src={product.image}
           alt={product.name}
@@ -24,24 +52,20 @@ alert (`${product.name} added to cart`)
         />
 
         <button
-          onClick={() => onAddToWishlist(product)}
-          className="absolute top-2 right-2 bg-white rounded-full p-2 shadow hover:bg-gray-100"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-pink-400 hover:text-pink-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
+        onClick={ToggleEffect}
+    
+        className={`absolute top-2 right-2 p-2 rounded-full transition-all z-10 ${
+          isWishListed  
+            ? 'bg-white text-pink-500' 
+            : 'bg-white text-gray-600 hover:bg-white '
+        } `}
+        title={isWishListed ? 'Remove from wishlist' : 'Add to wishlist'}
+      >
+        <Heart 
+          size={20} 
+          fill={isWishListed  ? "currentColor" : "none"}
+        />
+      </button>   can explain the working
       </div>
 
       <div className="p-4 flex-1 flex flex-col justify-between">
@@ -60,10 +84,10 @@ alert (`${product.name} added to cart`)
         </div>
 
         <button
-          onClick={handleAddToCart}
+          onClick={handleClick}
           className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition-colors"
         >
-          Add to Cart
+          SELECT OPTION
         </button>
       </div>
     </div>

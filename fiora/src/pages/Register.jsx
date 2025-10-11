@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useUser } from "../context/UserContext.jsx";
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +10,9 @@ const Register = () => {
     email: "",
     password: "",
   });
+
+const {register,error} = useUser()
+const navigate = useNavigate()
 
   const [errors, setErrors] = useState({});
 
@@ -45,27 +50,25 @@ const handleSubmit = async (e) => {
 
   if (Object.keys(newErrors).length === 0) {
     try {
-    
-      const res = await axios.get("http://localhost:5000/users");
-      const users = res.data;
+    const userData ={
+Username: formData.Username.trim(),
+      email: formData.email.toLowerCase().trim(),
+      password:formData.password,
+    }
 
-    
-      const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
-
-    
-      const newUser = { id: newId, ...formData };
-
-      const response = await axios.post("http://localhost:5000/users", newUser);
-      console.log("Form submitted:", response.data);
-      alert("Account created successfully!");
+    const result = await register(userData)
+      if(result){
+        alert("Account created successfully")
+navigate("/")
+      }
     
 
       
-      setFormData({
-        Username: "",
-        email: "",
-        password: "",
-      });
+      // setFormData({
+      //   Username: "",
+      //   email: "",
+      //   password: "",
+      // });
       setErrors({});
     } catch (error) {
       console.error("Error submitting form:", error);

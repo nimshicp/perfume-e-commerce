@@ -9,12 +9,15 @@ import Footer from "./components/Footer";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
+import Wishlist from "./pages/WishList";
+
 
 
 function App() {
  
   return (
     <div>
+    
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
@@ -22,7 +25,9 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/products" element={<Products/>} />
         <Route path ="/products/:id" element={<ProductDetails/>}/>
-        <Route path ="/cart" element={<Cart/>}/>
+        <Route path="/cart" element = {<Cart/>}/>
+        <Route path="/wishlist" element ={<Wishlist/>}/>
+        
 
       </Routes>
       < Footer/>

@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Heart, ShoppingCart, Minus, Plus, Star, Truck, Shield, RotateCcw } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import { useShop } from "../context/ShopContext";
+import { useUser } from "../context/UserContext";
+
 
 function ProductDetails() {
   const { id } = useParams();
   const location = useLocation();
   const product = location.state?.product;
+const {addToCart} = useShop()
+const {user} = useUser()
 
-  const {AddToCart} = useCart()
 
   const [quantity, setQuantity] = useState(1);
 
@@ -25,11 +28,17 @@ function ProductDetails() {
 
 
 
-const handleAddToCart = ()=>{
-AddToCart(product,quantity)
-alert (`${product.name} added to cart`)
-}
 
+const handleAddToCart = () => {
+
+  if(!user){
+    alert("please login to add items to cart")
+    return
+  }
+addToCart(product,1)
+alert(`${product.name} is added to cart`)
+
+}
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,12 +66,7 @@ alert (`${product.name} added to cart`)
                 <span className="inline-block px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm font-medium capitalize">
                   {product.category}
                 </span>
-                <div className="flex items-center space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} size={16} className="fill-amber-400 text-amber-400" />
-                  ))}
-                  <span className="text-sm text-gray-600 ml-2">(128 reviews)</span>
-                </div>
+                
               </div>
 
         
@@ -127,7 +131,7 @@ alert (`${product.name} added to cart`)
 
             
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <button className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium" onClick={handleAddToCart}>
+                <button className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"  onClick={handleAddToCart}>
                   <ShoppingCart size={20} />
                   Add to Cart
                 </button>
