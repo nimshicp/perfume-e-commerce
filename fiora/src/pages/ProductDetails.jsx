@@ -29,16 +29,17 @@ const {user} = useUser()
 
 
 
-const handleAddToCart = () => {
-
-  if(!user){
-    alert("please login to add items to cart")
-    return
+const handleAddToCart = async () => {
+  if (!user) {
+    alert("Please login to add items to cart");
+    return;
   }
-addToCart(product,1)
-alert(`${product.name} is added to cart`)
 
-}
+  await addToCart(product, quantity);
+  alert(`${quantity} ${product.name}(s) added to cart`);
+  
+};
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,7 +109,9 @@ alert(`${product.name} is added to cart`)
                 <div className="flex items-center space-x-4">
                   <div className="flex border border-gray-300 rounded-lg">
                     <button
-                        onClick={() => updateCartQuantity(product.id, product.quantity - 1)}
+                        
+    onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+
                       className="px-4 py-3 hover:bg-gray-50 transition-colors"
                     >
                       <Minus size={16} />
@@ -117,7 +120,7 @@ alert(`${product.name} is added to cart`)
                       {quantity}
                     </span>
                     <button
-                      onClick={() => updateCartQuantity(product.id, product.quantity + 1)}
+                       onClick={() => setQuantity((prev) => prev + 1)}
                       className="px-4 py-3 hover:bg-gray-50 transition-colors"
                     >
                       <Plus size={16} />

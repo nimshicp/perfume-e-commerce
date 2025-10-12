@@ -63,7 +63,7 @@ function OrderHistory() {
           </p>
         </div>
 
-        {/* Orders List */}
+    
         <div className="space-y-4">
           {orders.map((order) => {
             const canCancel = order.status === 'pending' || order.status === 'confirmed';
@@ -72,7 +72,7 @@ function OrderHistory() {
             return (
               <div key={order.id} className="bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
                 
-                {/* Order Header - Always Visible */}
+            
                 <div className="p-6 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                   <div className="flex justify-between items-start">
                     <div>
@@ -102,7 +102,7 @@ function OrderHistory() {
                     </div>
                   </div>
 
-                  {/* Order Items Preview */}
+                
                   <div className="mt-4">
                     <div className="flex flex-wrap gap-2">
                       {order.items.slice(0, 3).map((item, index) => (
@@ -122,12 +122,12 @@ function OrderHistory() {
                   </div>
                 </div>
 
-                {/* Expanded Order Details - Show for ALL orders */}
+                
                 {isExpanded && (
                   <div className="border-t border-gray-200 p-6">
                     <div className="grid md:grid-cols-2 gap-8">
                       
-                      {/* Order Items */}
+                      
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-4">Order Items</h4>
                         <div className="space-y-3">
@@ -152,10 +152,10 @@ function OrderHistory() {
                         </div>
                       </div>
 
-                      {/* Order Information */}
+                
                       <div className="space-y-6">
                         
-                        {/* Customer Info */}
+                
                         <div>
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                             <MapPin className="w-4 h-4 mr-2" />
@@ -175,7 +175,7 @@ function OrderHistory() {
                           </div>
                         </div>
 
-                        {/* Payment Info */}
+            
                         <div>
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                             <CreditCard className="w-4 h-4 mr-2" />
@@ -199,7 +199,7 @@ function OrderHistory() {
                           </div>
                         </div>
 
-                        {/* Order Total */}
+                
                         <div className="bg-gray-50 rounded-lg p-4">
                           <div className="flex justify-between text-lg font-semibold">
                             <span>Total Amount</span>
@@ -207,19 +207,19 @@ function OrderHistory() {
                           </div>
                         </div>
 
-                        {/* Cancel Button - Only show for pending/confirmed orders */}
+            
                         {canCancel && (
                           <button
                             onClick={() => handleCancelOrder(order.id)}
                             disabled={loading}
                             className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
                           >
-                            <X className="w-4 h-4 mr-2" />
+                        
                             {loading ? 'Cancelling...' : 'Cancel Order'}
                           </button>
                         )}
 
-                        {/* Cancelled Order Message */}
+                    
                         {order.status === 'cancelled' && (
                           <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
                             <p className="text-red-800 font-medium">Order Cancelled</p>
@@ -229,7 +229,7 @@ function OrderHistory() {
                           </div>
                         )}
 
-                        {/* Confirmed Order Message */}
+                        
                         {order.status === 'confirmed' && (
                           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
                             <p className="text-blue-800 font-medium">Order Confirmed</p>

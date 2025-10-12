@@ -107,7 +107,6 @@ function Payment({ order, amount }) {
         }
         className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 flex items-center justify-center"
       >
-        <Lock className="w-4 h-4 mr-2" />
         {loading ? (
           "Processing..."
         ) : (
