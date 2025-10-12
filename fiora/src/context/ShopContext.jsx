@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { useUser } from "./UserContext";
 import axios from "axios";
 
@@ -7,6 +7,11 @@ const ShopContext = createContext();
 export const ShopProvider = ({ children }) => {
   const { user, setUser } = useUser();
   const [error, setError] = useState("");
+
+
+
+
+
 
   const UpdateDb = async (update) => {
     if (!user) {
@@ -26,6 +31,12 @@ export const ShopProvider = ({ children }) => {
       setError("failed to update");
     }
   };
+
+
+
+
+
+
 
   const addToCart = async (product, quantity = 1) => {
     if (!user) {
@@ -48,6 +59,13 @@ export const ShopProvider = ({ children }) => {
     }
     return await UpdateDb({ cart: newCart });
   };
+
+
+
+
+
+
+
 
   const removeFromCart = async (productId) => {
     if (!user) return;
@@ -72,11 +90,21 @@ export const ShopProvider = ({ children }) => {
   };
 
   const cart = user?.cart || [];
-  const cartTotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
+
+
+
+
+
+  
+  const cartTotal = useMemo(
+    () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [cart]
   );
-  const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const cartItemsCount = useMemo(
+    () => cart.reduce((sum, item) => sum + item.quantity, 0),
+    [cart]
+  );
 
   const clearCart = async () => {
     if (!user) return;
@@ -86,35 +114,19 @@ export const ShopProvider = ({ children }) => {
 
 
 
-  const addToWishList = async (product) => {
-    if (!user) return;
 
-    const currentWishList = user.wishlist || [];
-    const existing = currentWishList.find(item => item.id ===product.id);
 
-    if(existing){
-      setError("item is already included");
-      return;
-    }
 
-    const newWishList = [...currentWishList, product];
-    return await UpdateDb({ wishlist: newWishList });
-  };
+ 
+
+
+
+// order functions
 
 
 
 
-  const removeFromWishList = async (productId) => {
-    if (!user) return;
-    const currentWishList = user.wishlist || [];
-    const newWishList = currentWishList.filter((item) => item.id !== productId);
-    return await UpdateDb({ wishlist: newWishList });
-  };
 
-  const isWishList = (productId) => {
-    return user?.wishlist?.some(item => item.id ===productId) || false;
-  };
-const wishlist = user?.wishlist || [];
 
 
   return (
@@ -127,10 +139,8 @@ const wishlist = user?.wishlist || [];
         cartTotal,
         cartItemsCount,
         clearCart,
-        addToWishList,
-        removeFromWishList,
-        isWishList,
-        wishlist
+        
+       
       }}
     >
       {children}

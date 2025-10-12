@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { Heart, ShoppingCart, Minus, Plus, Star, Truck, Shield, RotateCcw } from "lucide-react";
+import { Heart, ShoppingCart, Minus, Plus,  Truck, Shield, RotateCcw } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { useUser } from "../context/UserContext";
 
@@ -9,7 +9,7 @@ function ProductDetails() {
   const { id } = useParams();
   const location = useLocation();
   const product = location.state?.product;
-const {addToCart} = useShop()
+const {addToCart,updateCartQuantity,cart} = useShop()
 const {user} = useUser()
 
 
@@ -108,7 +108,7 @@ alert(`${product.name} is added to cart`)
                 <div className="flex items-center space-x-4">
                   <div className="flex border border-gray-300 rounded-lg">
                     <button
-                      onClick={() => setQuantity(prev => (prev > 1 ? prev - 1 : 1))}
+                        onClick={() => updateCartQuantity(product.id, product.quantity - 1)}
                       className="px-4 py-3 hover:bg-gray-50 transition-colors"
                     >
                       <Minus size={16} />
@@ -117,7 +117,7 @@ alert(`${product.name} is added to cart`)
                       {quantity}
                     </span>
                     <button
-                      onClick={() => setQuantity((prev) => prev + 1)}
+                      onClick={() => updateCartQuantity(product.id, product.quantity + 1)}
                       className="px-4 py-3 hover:bg-gray-50 transition-colors"
                     >
                       <Plus size={16} />
@@ -129,20 +129,21 @@ alert(`${product.name} is added to cart`)
                 </div>
               </div>
 
-            
+            {
+              
+            }
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <button className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"  onClick={handleAddToCart}>
                   <ShoppingCart size={20} />
                   Add to Cart
                 </button>
-
-                <button className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-xl transition-colors flex-1 font-medium">
-                  Buy Now
-                </button>
-
-                <button className="p-4 rounded-xl border bg-white border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors">
-                  <Heart size={20} />
-                </button>
+<button>
+   <Heart 
+            size={0} 
+          
+          />
+</button>
+                
               </div>
             </div>
           </div>

@@ -3,21 +3,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, ShoppingCart, Heart } from "lucide-react";
 import { useUser } from "../context/userContext";
 import { useShop } from "../context/ShopContext";
+import { useWishlist } from "../context/WishlistContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { cartItemsCount,wishlist } = useShop();
+  const { cartItemsCount } = useShop();
+  const {wishlist}=useWishlist()
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-gray-900 tracking-wider">
+            <Link to="/"className="text-2xl font-bold text-gray-900 tracking-wider">
               FIORA SCENTS.
-            </h1>
+            </Link>
+        
+
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
@@ -51,6 +55,9 @@ const Navbar = () => {
                 )}
               </div>
             )}
+
+
+
 
             {user && (
               <div

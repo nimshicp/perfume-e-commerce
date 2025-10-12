@@ -19,14 +19,14 @@ navigate("/products",{state:{category}});
           loop
           playsInline
           className="w-full h-full object-cover"
-          style={{ height: 650 }}
+          style={{ height: 750 }}
         >
           <source src="/products/making.mp4" type="video/mp4" />
   
         </video>
       </div>
       
-      <div className="absolute inset-0  bg-opacity-40" style={{ height: 650 }} />
+      <div className="absolute inset-0  bg-opacity-40" style={{ height: 750 }} />
       
       <div className="relative z-10 flex items-center justify-center h-full text-center text-gray px-4">
         <div className="max-w-4xl">

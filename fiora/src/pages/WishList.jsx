@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { useUser } from '../context/UserContext';
+import { useWishlist } from '../context/WishlistContext';
 
 function Wishlist() {
   const { user } = useUser();
-  const { wishlist, removeFromWishList, addToCart } = useShop();
+  const {  addToCart } = useShop();
+const {wishlist, removeFromWishList}=useWishlist()
+
+
 
   if (!user) {
     return null

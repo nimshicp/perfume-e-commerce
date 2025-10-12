@@ -27,7 +27,7 @@ navigate("/products",{state:{category}});
             <div 
               className="h-64 bg-cover bg-center"
               style={{
-                backgroundImage: 'url("https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")'
+                backgroundImage: 'url("./products/women.jpg")'
               }}
             ></div>
             <div className="p-6">
@@ -46,7 +46,7 @@ navigate("/products",{state:{category}});
             <div 
               className="h-64 bg-cover bg-center"
               style={{
-                backgroundImage: 'url("./products/perfume.jpg")'
+                backgroundImage: 'url("./products/men.jpg")'
               }}
             ></div>
             <div className="p-6">
@@ -65,7 +65,10 @@ navigate("/products",{state:{category}});
             <div 
               className="h-64 bg-cover bg-center"
               style={{
-                backgroundImage: 'url("./products/perfume.jpg")'
+                backgroundImage: 'url("./products/unisex.jpg")',
+                backgroundSize:310,
+
+                
               }}
             ></div>
             <div className="p-6">
