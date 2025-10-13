@@ -14,7 +14,7 @@
           "category": "men",
           "description": "A bold and mysterious scent with dark amber, leather, and sandalwood notes. Ideal for the modern gentleman who commands attention.",
           "stock": 10,
-          "quantity": 3
+          "quantity": 5
         }
       ],
       "wishlist": [
@@ -85,6 +85,34 @@
           },
           "createdAt": "2025-10-12T17:38:47.454Z",
           "updatedAt": "2025-10-12T17:38:50.622Z"
+        },
+        {
+          "id": 1760327142835,
+          "userId": "fdce",
+          "items": [
+            {
+              "id": "2",
+              "name": "Noir Mystique",
+              "price": 79.99,
+              "image": "https://images.pexels.com/photos/13882813/pexels-photo-13882813.jpeg",
+              "category": "men",
+              "description": "A bold and mysterious scent with dark amber, leather, and sandalwood notes. Ideal for the modern gentleman who commands attention.",
+              "stock": 10,
+              "quantity": 3
+            }
+          ],
+          "total": 239.96999999999997,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "cash on delivery",
+          "paymentStatus": "pending",
+          "customerInfo": {
+            "name": "Nimshi cp",
+            "email": "nimshicp2003@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-10-13T03:45:42.835Z",
+          "updatedAt": "2025-10-13T03:45:45.869Z"
         }
       ]
     },

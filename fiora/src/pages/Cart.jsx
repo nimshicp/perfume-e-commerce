@@ -20,26 +20,7 @@ function Cart() {
 
   const cartLength = cart?.length || 0;
 
-  const handleCheckout = async () => {
-    if (cartLength === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
-
-    const order = await createOrder({
-      shippingAddress: "123 Main St, City, Country",
-      paymentMethod: "Credit Card",
-    });
-
-    if (order) {
-      alert(
-        `✅ Order #${
-          order.id
-        } placed successfully!\nTotal: $${order.total?.toFixed(2)}`
-      );
-    }
-  };
-
+  
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -53,7 +34,7 @@ function Cart() {
             to="/login"
             className="inline-flex items-center justify-center bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
           >
-            Sign In
+            Login
           </Link>
         </div>
       </div>

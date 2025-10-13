@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Search, Menu } from "lucide-react";
+import { Search, Menu ,ChevronDown} from "lucide-react";
 import axios from "axios";
 import ProductCard from "../components/productCard";
 import { useLocation } from "react-router-dom";
@@ -13,6 +13,8 @@ function Products() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [noResult,setNoResult] = useState(false)
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterType, setFilterType] = useState("");
 
   useEffect(() => {
     const FetchProducts = async () => {
@@ -67,6 +69,25 @@ if(searched.length === 0){
 
   };
 
+
+const handleFilter = (type) => {
+    setFilterType(type);
+    setShowFilter(false); 
+
+    const sorted = [...filteredProducts].sort((a, b) => {
+      if (type === "lowToHigh") return a.price - b.price;
+      if (type === "highToLow") return b.price - a.price;
+      return 0;
+    });
+
+    setFilteredProducts(sorted);
+  };
+
+
+
+
+
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -80,13 +101,39 @@ if(searched.length === 0){
 
   return (
     <>
-      <div className="w-full bg-white border-b border-gray-200">
+      <div className="w-full bg-white border-b border-gray-200 relative">
         <div className="flex items-center gap-4 px-4 py-3">
-          <button className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-            <Menu size={20} />
-            <span className="text-sm font-medium">Filter</span>
-          </button>
+  
+          <div className="relative">
+            <button
+              onClick={() => setShowFilter((prev) => !prev)}
+              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded border"
+            >
+              <Menu size={18} />
+              <span className="text-sm font-medium">Filter</span>
+              <ChevronDown size={16} />
+            </button>
 
+            
+            {showFilter && (
+              <div className="absolute mt-2 bg-white shadow-lg rounded-md border w-48 z-10">
+                <button
+                  onClick={() => handleFilter("lowToHigh")}
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  Price: Low to High
+                </button>
+                <button
+                  onClick={() => handleFilter("highToLow")}
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  Price: High to Low
+                </button>
+              </div>
+            )}
+          </div>
+
+      
           <div className="flex-1 relative max-w-5xl">
             <input
               type="text"
@@ -106,19 +153,18 @@ if(searched.length === 0){
         </div>
       </div>
 
-<div className="p-4">
-{
-  noResult ? <h2>No product found</h2>:
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+    
+      <div className="p-4">
+        {noResult ? (
+          <h2 className="text-center text-gray-500 text-lg">No products found</h2>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+            {filteredProducts.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        )}
       </div>
-
-  
-}
-
-</div>
 
       
     </>

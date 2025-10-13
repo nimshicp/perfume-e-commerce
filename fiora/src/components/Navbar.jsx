@@ -40,7 +40,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            {user && (
+            
               <div className="relative">
                 <button
                   className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -54,12 +54,12 @@ const Navbar = () => {
                   </span>
                 )}
               </div>
-            )}
+          
 
 
 
 
-            {user && (
+            
               <div
                 className="relative cursor-pointer"
                 onClick={() => navigate("/cart")}
@@ -72,7 +72,7 @@ const Navbar = () => {
                   </span>
                 )}
               </div>
-            )}
+          
 
             {user ? (
               <>
