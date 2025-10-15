@@ -8,6 +8,7 @@ import { UserProvider } from "./context/UserContext.jsx";
 import { ShopProvider } from "./context/ShopContext.jsx";
 import { WishlistProvider } from "./context/WishlistContext.jsx";
 import { OrderProvider } from "./context/OrderContext.jsx";
+import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")).render(
           <WishlistProvider>
             <OrderProvider>
               <App />
+              <Toaster position="top-right" reverseOrder={false} />
             </OrderProvider>
           </WishlistProvider>
         </ShopProvider>

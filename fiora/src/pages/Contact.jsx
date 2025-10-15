@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Thanks for your message! We\'ll reply soon.');
+    toast.success('Thanks for your message! We\'ll reply soon.');
     setFormData({ name: '', email: '', message: '' });
   };
 

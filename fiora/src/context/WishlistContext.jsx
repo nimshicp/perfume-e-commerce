@@ -1,12 +1,17 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({children}) => {
   const { user, setUser } = useUser();
   const [error,setError]=useState("")
+   
+  
+  
 
   const UpdateDb = async (update) => {
     if (!user) {
@@ -27,6 +32,29 @@ export const WishlistProvider = ({children}) => {
     }
   };
 
+
+
+
+
+useEffect(() => {
+  const syncUser = (e) => {
+    if (e.key === "currentUser") {
+      const updatedUser = JSON.parse(e.newValue);
+      setUser(updatedUser);
+    }
+  };
+
+  window.addEventListener("storage", syncUser);
+
+  return () => window.removeEventListener("storage", syncUser);
+}, [setUser]);
+
+
+
+
+
+
+
   const addToWishList = async (product) => {
     if (!user) return;
 
@@ -35,6 +63,7 @@ export const WishlistProvider = ({children}) => {
 
     if (existing) {
       setError("item is already included");
+      
       return;
     }
 
@@ -54,9 +83,16 @@ export const WishlistProvider = ({children}) => {
   };
   const wishlist = user?.wishlist || [];
 
+
+
+
+
+
+
+
   return (
     <WishlistContext.Provider
-      value={{ addToWishList, removeFromWishList, isWishList, wishlist }}
+      value={{ addToWishList, removeFromWishList, isWishList, wishlist}}
     >
       {children}
     </WishlistContext.Provider>

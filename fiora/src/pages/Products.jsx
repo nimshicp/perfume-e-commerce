@@ -83,7 +83,16 @@ const handleFilter = (type) => {
     setFilteredProducts(sorted);
   };
 
+const handleCategory =(category)=> {
 
+let temp = [...product];
+
+if (category){
+  temp = temp.filter((p) => p.category === category)
+}
+setFilteredProducts(temp)
+return
+}
 
 
 
@@ -140,18 +149,63 @@ const handleFilter = (type) => {
               placeholder="Search products..."
               onChange={(e) => setSearch(e.target.value)}
               value={search}
-              className="w-full pl-4 pr-16 py-2 border border-gray-300 rounded focus:outline-none focus:border-gray-400 bg-white text-sm"
+              className="w-full pl-4 pr-16 py-2 border border-gray-300
+              
+              
+              
+              
+              
+              
+              rounded focus:outline-none focus:border-gray-400 bg-white text-sm"
             />
           </div>
 
           <button
-            className="bg-pink-400 hover:bg-pink-500 text-white p-2 rounded"
+            className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded"
             onClick={handleSearch}
           >
             <Search size={20} />
           </button>
         </div>
       </div>
+{/* Category Buttons */}
+<div className="flex flex-wrap justify-center gap-3 my-6">
+  <button
+    onClick={() => { setFilteredProducts(product); return; }}
+    className="px-5 py-2 rounded-full bg-gray-800 border border-gray-300 text-white 
+               hover:bg-gray-600 hover:text-white transition-all duration-300 
+               shadow-sm hover:shadow-md"
+  >
+    All
+  </button>
+
+  <button
+    onClick={() => handleCategory("men")}
+    className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
+               hover:bg-gray-800 hover:text-white transition-all duration-300 
+               shadow-sm hover:shadow-md"
+  >
+    Men
+  </button>
+
+  <button
+    onClick={() => handleCategory("women")}
+    className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
+               hover:bg-gray-800 hover:text-white transition-all duration-300 
+               shadow-sm hover:shadow-md"
+  >
+    Women
+  </button>
+
+  <button
+    onClick={() => handleCategory("unisex")}
+    className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
+               hover:bg-gray-800 hover:text-white transition-all duration-300 
+               shadow-sm hover:shadow-md"
+  >
+    Unisex
+  </button>
+</div>
 
     
       <div className="p-4">

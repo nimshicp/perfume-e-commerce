@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
 
     const navigate =useNavigate()
-    const {login} = useUser()
+    const {login,user} = useUser()
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
     password: "",
   });
+
 
   const [errors, setErrors] = useState({});
 
@@ -31,6 +33,14 @@ const Login = () => {
     }));
   };
 
+
+useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+
  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
@@ -50,15 +60,15 @@ const Login = () => {
         );
 
         if (foundUser) {
-          alert("Login successful!");
+          toast.success("Login successful!");
           login(foundUser); 
           navigate("/");
         } else {
-          alert("Invalid username/email or password");
+          toast.error("Invalid username/email or password");
         }
          } catch (error) {
         console.error("Login failed:", error);
-        alert("Server error! Please try again later.");
+        toast.error("Server error! Please try again later.");
       }
     }
   };

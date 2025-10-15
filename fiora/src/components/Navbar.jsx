@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, ShoppingCart, Heart } from "lucide-react";
-import { useUser } from "../context/userContext";
+import { Menu, X, ShoppingCart, Heart ,ShoppingBag} from "lucide-react";
+import { useUser } from "../context/UserContext";
 import { useShop } from "../context/ShopContext";
 import { useWishlist } from "../context/WishlistContext";
 
@@ -40,75 +40,70 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            
-              <div className="relative">
-                <button
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
-                  onClick={() => navigate("/wishlist")}
-                >
-                  <Heart className="h-6 w-6" />
-                </button>
-                {wishlist.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {wishlist.length}
-                  </span>
-                )}
-              </div>
-          
+  
+  <div className="relative">
+    <button
+      className="text-gray-600 hover:text-gray-900 transition-colors"
+      onClick={() => navigate("/wishlist")}
+    >
+      <Heart className="h-6 w-6" />
+    </button>
+    {wishlist.length > 0 && (
+      <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+        {wishlist.length}
+      </span>
+    )}
+  </div>
 
 
+  <div className="relative cursor-pointer" onClick={() => navigate("/orders")}>
+    <ShoppingBag size={24} className="text-gray-700 hover:text-gray-900" />
+  </div>
+
+  
+  <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
+    <ShoppingCart size={24} />
+    {cartItemsCount > 0 && (
+      <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+        {cartItemsCount}
+      </span>
+    )}
+  </div>
+
+  
+  {user ? (
+    <>
+      <span className="text-gray-700 font-semibold">
+        Hi, {user.Username}
+      </span>
+      <button
+        onClick={() => {
+          logout();
+          navigate("/login");
+        }}
+        className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
+      >
+        Logout
+      </button>
+    </>
+  ) : (
+    <button
+      onClick={() => navigate("/login")}
+      className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
+    >
+      Login
+    </button>
+  )}
 
 
-            
-              <div
-                className="relative cursor-pointer"
-                onClick={() => navigate("/cart")}
-              >
-                <ShoppingCart size={24} />
+  <button
+    onClick={() => setMenuOpen(!menuOpen)}
+    className="md:hidden text-gray-800 hover:text-gray-900 focus:outline-none"
+  >
+    {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+  </button>
+</div>
 
-                {cartItemsCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItemsCount}
-                  </span>
-                )}
-              </div>
-          
-
-            {user ? (
-              <>
-                <span className="text-gray-700 font-semibold">
-                  Hi, {user.Username}
-                </span>
-                <button
-                  onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }}
-                  className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={() => navigate("/login")}
-                className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
-              >
-                Login
-              </button>
-            )}
-
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-gray-800 hover:text-gray-900 focus:outline-none"
-            >
-              {menuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
         </div>
       </div>
 

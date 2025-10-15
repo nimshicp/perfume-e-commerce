@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
-import { useUser } from "./UserContext";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useUser } from "./userContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const ShopContext = createContext();
 
@@ -36,6 +37,39 @@ export const ShopProvider = ({ children }) => {
 
 
 
+// const UpdateProductStock = async (updatedProduct) => {
+//   try {
+    
+//     await axios.patch(`http://localhost:5000/products/${updatedProduct.id}`, updatedProduct);
+
+  
+//   } catch (err) {
+//     console.error("Failed to update product stock", err);
+//     toast.error("Failed to update stock");
+//   }
+// };
+
+
+
+
+
+useEffect(() => {
+  const syncUser = (e) => {
+    if (e.key === "currentUser") {
+      const updatedUser = JSON.parse(e.newValue);
+      setUser(updatedUser);
+    }
+  };
+
+  window.addEventListener("storage", syncUser);
+
+  return () => window.removeEventListener("storage", syncUser);
+}, [setUser]);
+
+
+
+
+
 
 
   const addToCart = async (product, quantity = 1) => {
@@ -44,11 +78,19 @@ export const ShopProvider = ({ children }) => {
       return null;
     }
 
+    if(product.stock<quantity){
+      toast.error("not enough stock is available")
+    }
+
     const currentCart = user.cart || [];
     const existingItem = currentCart.find((item) => item.id === product.id);
 
     let newCart;
     if (existingItem) {
+if(existingItem.quantity>product.stock){
+  toast.error("not enough stock is available")
+}
+
       newCart = currentCart.map((item) =>
         item.id === product.id
           ? { ...item, quantity: item.quantity + quantity }
@@ -57,11 +99,13 @@ export const ShopProvider = ({ children }) => {
     } else {
       newCart = [...currentCart, { ...product, quantity }];
     }
-    return await UpdateDb({ cart: newCart });
+
+  //   const updatedProduct = { ...product, stock: product.stock - quantity };
+  // await UpdateProductStock(updatedProduct); 
+
+  return await UpdateDb({ cart: newCart });
+    
   };
-
-
-
 
 
 
@@ -94,7 +138,6 @@ export const ShopProvider = ({ children }) => {
 
 
 
-
   
   const cartTotal = useMemo(
     () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -111,19 +154,6 @@ export const ShopProvider = ({ children }) => {
 
     return await UpdateDb({ cart: [] });
   };
-
-
-
-
-
-
- 
-
-
-
-
-
-
 
 
 

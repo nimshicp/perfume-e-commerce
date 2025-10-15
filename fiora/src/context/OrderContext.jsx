@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { useUser } from "./UserContext";
+import { useUser } from "./userContext";
 import axios from "axios";
 import { useShop } from "./ShopContext";
 
@@ -10,6 +10,8 @@ export const OrderProvider = ({ children }) => {
   const [error, setError] = useState("");
   const { cart, cartTotal, clearCart } = useShop();
 
+
+  
   const UpdateDb = async (update) => {
     if (!user) {
       return null;
@@ -28,6 +30,35 @@ export const OrderProvider = ({ children }) => {
       setError("failed to update");
     }
   };
+
+
+
+
+
+
+const reduceStock = async (items) => {
+  for (let item of items) {
+    const productResponse = await axios.get(`http://localhost:5000/products/${item.id}`);
+    const product = productResponse.data;
+    const newStock = product.stock - item.quantity;
+    await axios.patch(`http://localhost:5000/products/${item.id}`, { stock: newStock });
+  }
+};
+
+const restoreStock = async (items) => {
+  for (let item of items) {
+    const productResponse = await axios.get(`http://localhost:5000/products/${item.id}`);
+    const product = productResponse.data;
+    const restoredStock = product.stock + item.quantity;
+    await axios.patch(`http://localhost:5000/products/${item.id}`, { stock: restoredStock });
+  }
+};
+
+
+
+
+
+
 
   const createOrder = async (orderData) => {
     if (!user) {
@@ -69,6 +100,7 @@ export const OrderProvider = ({ children }) => {
       const orders = user.orders || [];
       const updatedOrders = orders.map((order) => {
         if (order.id === orderId) {
+          reduceStock(order.items)
           return {
             ...order,
             paymentMethod: "UPI",
@@ -95,6 +127,7 @@ export const OrderProvider = ({ children }) => {
       const orders = user.orders || [];
       const updatedOrders = orders.map((order) => {
         if (order.id === orderId) {
+          reduceStock(order.items)
           return {
             ...order,
             paymentMethod: "cash on delivery",
@@ -125,6 +158,7 @@ const cancelOrder = async (orderId) => {
     const orders = user.orders || [];
     const updatedOrders = orders.map((order) => {
       if (order.id === orderId) {
+        restoreStock(order.items)
         return {
           ...order,
           status: 'cancelled',

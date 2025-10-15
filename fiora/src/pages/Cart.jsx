@@ -3,6 +3,8 @@ import { useShop } from "../context/ShopContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, CreditCard } from "lucide-react";
+import toast from "react-hot-toast";
+
 
 function Cart() {
   const { user } = useUser();
@@ -126,7 +128,7 @@ function Cart() {
 
     
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() =>{ removeFromCart(item.id) ;toast.success(`${item.name} removed from cart`);}}
                     className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                     title="Remove item"
                   >

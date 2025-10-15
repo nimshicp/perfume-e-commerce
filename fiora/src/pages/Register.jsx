@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useUser } from "../context/UserContext.jsx";
+import { useUser } from "../context/userContext";
+import toast from "react-hot-toast";
 
 
 const Register = () => {
@@ -11,7 +12,7 @@ const Register = () => {
     password: "",
   });
 
-const {register,error} = useUser()
+const {register,error,user} = useUser()
 const navigate = useNavigate()
 
   const [errors, setErrors] = useState({});
@@ -19,17 +20,25 @@ const navigate = useNavigate()
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.Username.trim()) newErrors.Username = "First name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
 
-    if ( !formData.email.includes("@")) {
-      newErrors.email = "Please enter a valid email";
-    }
+ if (!formData.Username.trim()) {
+    newErrors.Username = "Username is required";
+  } else if (!/^[A-Za-z]/.test(formData.Username.trim())) {
+    newErrors.Username = "Username must start with a letter";
+  }
 
-    if (formData.password && formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
+  
+  if (!formData.email) {
+    newErrors.email = "Email is required";
+  } else if (!formData.email.includes("@")) {
+    newErrors.email = "Please enter a valid email";
+  }
+
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+  } else if (formData.password.length < 8) {
+    newErrors.password = "Password must be at least 8 characters";
+  }
 
     return newErrors;
   };
@@ -58,17 +67,10 @@ Username: formData.Username.trim(),
 
     const result = await register(userData)
       if(result){
-        alert("Account created successfully")
+        toast.success("Account created successfully")
 navigate("/")
       }
-    
-
-      
-      // setFormData({
-      //   Username: "",
-      //   email: "",
-      //   password: "",
-      // });
+  
       setErrors({});
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -76,6 +78,13 @@ navigate("/")
     }
   }
 };
+
+
+useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
 
 
@@ -119,7 +128,7 @@ navigate("/")
                 Email
               </label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 name="email"
                 value={formData.email}

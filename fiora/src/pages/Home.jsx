@@ -6,6 +6,7 @@ import FragranceCollections from '../components/FragranceCollection'
 function Home() {
   return (
     <>
+    
     <Video/>
     <FragranceCollections/>
     </>

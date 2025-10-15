@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useOrder } from '../context/OrderContext';
-import { Package, Calendar, MapPin, CreditCard, X, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useOrder } from "../context/OrderContext";
+import {
+  ShoppingBag,
+  Calendar,
+  MapPin,
+  CreditCard,
+  X,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import toast from "react-hot-toast";
 
 function OrderHistory() {
   const { getUserOrders, cancelOrder } = useOrder();
@@ -9,26 +18,32 @@ function OrderHistory() {
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleCancelOrder = async (orderId) => {
-    if (!window.confirm('Are you sure you want to cancel this order?')) {
-      return;
-    }
+  function handleCancel(orderId) {
+  toast((t) => (
+    <div className="flex flex-col gap-2">
+      <p>Are you sure you want to cancel this order?</p>
+      <div className="flex gap-2 justify-end">
+        <button
+          className="bg-red-500 text-white px-3 py-1 rounded"
+          onClick={() => {
+            toast.dismiss(t.id); 
+            cancelOrder(orderId);
+            toast.success("Order canceled successfully!");
+          }}
+        >
+          Yes
+        </button>
+        <button
+          className="bg-gray-300 px-3 py-1 rounded"
+          onClick={() => toast.dismiss(t.id)}
+        >
+          No
+        </button>
+      </div>
+    </div>
+  ));
+}
 
-    setLoading(true);
-    try {
-      const result = await cancelOrder(orderId);
-      if (result) {
-        alert('Order cancelled successfully');
-        setExpandedOrder(null);
-      } else {
-        alert('Failed to cancel order');
-      }
-    } catch (error) {
-      alert('Failed to cancel order');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
@@ -38,9 +53,13 @@ function OrderHistory() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">No orders yet</h2>
-          <p className="text-gray-600 mb-6">Your order history will appear here</p>
+          <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            No orders yet
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Your order history will appear here
+          </p>
           <Link
             to="/products"
             className="inline-block bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors"
@@ -55,25 +74,30 @@ function OrderHistory() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
-        
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Order History</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Order History
+          </h1>
           <p className="text-gray-600">
-            {orders.length} {orders.length === 1 ? 'order' : 'orders'}
+            {orders.length} {orders.length === 1 ? "order" : "orders"}
           </p>
         </div>
 
-    
         <div className="space-y-4">
           {orders.map((order) => {
-            const canCancel = order.status === 'pending' || order.status === 'confirmed';
+            const canCancel =
+              order.status === "pending" || order.status === "confirmed";
             const isExpanded = expandedOrder === order.id;
 
             return (
-              <div key={order.id} className="bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
-                
-            
-                <div className="p-6 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
+              <div
+                key={order.id}
+                className="bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow"
+              >
+                <div
+                  className="p-6 cursor-pointer"
+                  onClick={() => toggleOrderDetails(order.id)}
+                >
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -84,37 +108,49 @@ function OrderHistory() {
                         {new Date(order.createdAt).toLocaleDateString()}
                       </p>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <p className="text-xl font-bold text-gray-900">
                           ${order.total.toFixed(2)}
                         </p>
-                        <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                          order.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
-                          order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                            order.status === "confirmed"
+                              ? "bg-blue-100 text-blue-800"
+                              : order.status === "cancelled"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-yellow-100 text-yellow-800"
+                          }`}
+                        >
                           {order.status}
                         </span>
                       </div>
-                      {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                      {isExpanded ? (
+                        <ChevronUp className="w-5 h-5 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                      )}
                     </div>
                   </div>
 
-                
                   <div className="mt-4">
                     <div className="flex flex-wrap gap-2">
                       {order.items.slice(0, 3).map((item, index) => (
-                        <div key={item.id} className="flex items-center space-x-2">
-                          <img 
-                            src={item.image} 
+                        <div
+                          key={item.id}
+                          className="flex items-center space-x-2"
+                        >
+                          <img
+                            src={item.image}
                             alt={item.name}
                             className="w-8 h-8 object-cover rounded"
                           />
                           <span className="text-sm text-gray-600">
                             {item.name}
-                            {index === 2 && order.items.length > 3 && ` +${order.items.length - 3} more`}
+                            {index === 2 &&
+                              order.items.length > 3 &&
+                              ` +${order.items.length - 3} more`}
                           </span>
                         </div>
                       ))}
@@ -122,26 +158,32 @@ function OrderHistory() {
                   </div>
                 </div>
 
-                
                 {isExpanded && (
                   <div className="border-t border-gray-200 p-6">
                     <div className="grid md:grid-cols-2 gap-8">
-                      
-                      
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-4">Order Items</h4>
+                        <h4 className="font-semibold text-gray-900 mb-4">
+                          Order Items
+                        </h4>
                         <div className="space-y-3">
                           {order.items.map((item) => (
-                            <div key={item.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                            <div
+                              key={item.id}
+                              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                            >
                               <div className="flex items-center space-x-3">
-                                <img 
-                                  src={item.image} 
-                                  alt={item.name} 
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
                                   className="w-12 h-12 object-cover rounded"
                                 />
                                 <div>
-                                  <p className="font-medium text-gray-900">{item.name}</p>
-                                  <p className="text-gray-600 text-sm">Qty: {item.quantity}</p>
+                                  <p className="font-medium text-gray-900">
+                                    {item.name}
+                                  </p>
+                                  <p className="text-gray-600 text-sm">
+                                    Qty: {item.quantity}
+                                  </p>
                                 </div>
                               </div>
                               <p className="font-semibold">
@@ -152,30 +194,37 @@ function OrderHistory() {
                         </div>
                       </div>
 
-                
                       <div className="space-y-6">
-                        
-                
                         <div>
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                             <MapPin className="w-4 h-4 mr-2" />
                             Shipping Information
                           </h4>
                           <div className="bg-gray-50 rounded-lg p-4">
-                            <p className="text-gray-700">{order.shippingAddress}</p>
+                            <p className="text-gray-700">
+                              {order.shippingAddress}
+                            </p>
                             {order.customerInfo && (
                               <div className="mt-2 text-sm text-gray-600">
-                                <p><strong>Name:</strong> {order.customerInfo.name}</p>
-                                <p><strong>Email:</strong> {order.customerInfo.email}</p>
+                                <p>
+                                  <strong>Name:</strong>{" "}
+                                  {order.customerInfo.name}
+                                </p>
+                                <p>
+                                  <strong>Email:</strong>{" "}
+                                  {order.customerInfo.email}
+                                </p>
                                 {order.customerInfo.phone && (
-                                  <p><strong>Phone:</strong> {order.customerInfo.phone}</p>
+                                  <p>
+                                    <strong>Phone:</strong>{" "}
+                                    {order.customerInfo.phone}
+                                  </p>
                                 )}
                               </div>
                             )}
                           </div>
                         </div>
 
-            
                         <div>
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                             <CreditCard className="w-4 h-4 mr-2" />
@@ -184,22 +233,27 @@ function OrderHistory() {
                           <div className="bg-gray-50 rounded-lg p-4">
                             <div className="flex justify-between text-sm mb-1">
                               <span>Method:</span>
-                              <span className="font-medium capitalize">{order.paymentMethod}</span>
+                              <span className="font-medium capitalize">
+                                {order.paymentMethod}
+                              </span>
                             </div>
                             <div className="flex justify-between text-sm">
                               <span>Status:</span>
-                              <span className={`font-medium ${
-                                order.paymentStatus === 'paid' ? 'text-green-600' : 
-                                order.paymentStatus === 'refunded' ? 'text-blue-600' :
-                                'text-yellow-600'
-                              }`}>
+                              <span
+                                className={`font-medium ${
+                                  order.paymentStatus === "paid"
+                                    ? "text-green-600"
+                                    : order.paymentStatus === "refunded"
+                                    ? "text-blue-600"
+                                    : "text-yellow-600"
+                                }`}
+                              >
                                 {order.paymentStatus}
                               </span>
                             </div>
                           </div>
                         </div>
 
-                
                         <div className="bg-gray-50 rounded-lg p-4">
                           <div className="flex justify-between text-lg font-semibold">
                             <span>Total Amount</span>
@@ -207,32 +261,35 @@ function OrderHistory() {
                           </div>
                         </div>
 
-            
                         {canCancel && (
                           <button
-                            onClick={() => handleCancelOrder(order.id)}
+                            onClick={() => {
+                               handleCancel(order.id)
+
+                            }}
                             disabled={loading}
                             className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
                           >
-                        
-                            {loading ? 'Cancelling...' : 'Cancel Order'}
+                            {loading ? "Cancelling..." : "Cancel Order"}
                           </button>
                         )}
 
-                    
-                        {order.status === 'cancelled' && (
+                        {order.status === "cancelled" && (
                           <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                            <p className="text-red-800 font-medium">Order Cancelled</p>
+                            <p className="text-red-800 font-medium">
+                              Order Cancelled
+                            </p>
                             <p className="text-red-700 text-sm mt-1">
                               This order has been cancelled
                             </p>
                           </div>
                         )}
 
-                        
-                        {order.status === 'confirmed' && (
+                        {order.status === "confirmed" && (
                           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                            <p className="text-blue-800 font-medium">Order Confirmed</p>
+                            <p className="text-blue-800 font-medium">
+                              Order Confirmed
+                            </p>
                             <p className="text-blue-700 text-sm mt-1">
                               Your order is being processed
                             </p>

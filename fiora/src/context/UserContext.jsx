@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { createContext } from 'react'
+import toast from 'react-hot-toast'
 
 
 
@@ -37,12 +38,10 @@ try{
     const res = await axios.get(`http://localhost:5000/users?email=${userData.email}`);
       if (res.data.length > 0) {
         setError("Account already exists");
-        alert("Account already exists!");
+        toast.error("Account already exists!");
         return null;
     }
 
-const usersResponse = await axios.get('http://localhost:5000/users')
-const  users = usersResponse.data
 
 const newUser ={
     ...userData,

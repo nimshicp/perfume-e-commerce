@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useOrder } from "../context/OrderContext";
 import { useNavigate } from "react-router-dom";
 import {Lock,Smartphone,Truck} from "lucide-react"
+import toast from "react-hot-toast";
 
 function Payment({ order, amount }) {
   const { processUPIPayment, cashOnDelivery } = useOrder();
@@ -12,7 +13,7 @@ function Payment({ order, amount }) {
 
   const handlePayment = async () => {
     if (!paymentMethod) {
-      alert("please select a payment method");
+      toast.error("please select a payment method");
       return;
     }
     setLoading(true);
@@ -22,7 +23,7 @@ function Payment({ order, amount }) {
 
       if (paymentMethod === "upi") {
         if (!upiId.includes("@")) {
-          alert("please enter a valid upiId");
+          toast.error("please enter a valid upiId");
           setLoading(false);
           return;
         }
@@ -35,7 +36,7 @@ function Payment({ order, amount }) {
         navigate(`/order-confirmation/${order.id}`);
       }
     } catch (err) {
-      alert("payment failed please try again");
+      toast.error("payment failed please try again");
     } finally {
       setLoading(false);
     }
