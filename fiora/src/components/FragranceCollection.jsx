@@ -14,10 +14,14 @@ navigate("/products",{state:{category}});
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
-          OUR FRAGRANCE COLLECTIONS
-          
-        </h2>
+       {/* Heading */}
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-light text-gray-800 mb-4 tracking-tight">
+            Our Fragrance Collections
+          </h2>
+          <div className="w-32 h-1 bg-gradient-to-r from-pink-400 to-pink-600 mx-auto rounded-full"></div>
+        </div>
+
         
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">

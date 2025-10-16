@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/userContext";
 import axios from "axios";
 import { Heart, ShoppingCart, Zap } from "lucide-react";
 import { useShop } from "../context/ShopContext";

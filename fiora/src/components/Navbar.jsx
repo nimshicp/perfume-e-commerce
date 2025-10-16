@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, ShoppingCart, Heart ,ShoppingBag} from "lucide-react";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/userContext";
 import { useShop } from "../context/ShopContext";
 import { useWishlist } from "../context/WishlistContext";
 
@@ -62,7 +62,7 @@ const Navbar = () => {
 
   
   <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
-    <ShoppingCart size={24} />
+    <ShoppingCart size={24} className="text-gray-700 hover:text-gray-900" />
     {cartItemsCount > 0 && (
       <span className="absolute -top-2 -right-2 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
         {cartItemsCount}

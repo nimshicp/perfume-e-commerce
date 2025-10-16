@@ -1,7 +1,7 @@
 import React from "react";
 import { useShop } from "../context/ShopContext";
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/userContext";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, CreditCard } from "lucide-react";
 import toast from "react-hot-toast";
 
