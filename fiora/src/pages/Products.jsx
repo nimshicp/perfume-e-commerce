@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Search, Menu ,ChevronDown} from "lucide-react";
+import { Search, Menu, ChevronDown } from "lucide-react";
 import axios from "axios";
 import ProductCard from "../components/productCard";
 import { useLocation } from "react-router-dom";
@@ -12,9 +12,11 @@ function Products() {
   const [product, setProduct] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [noResult,setNoResult] = useState(false)
+  const [noResult, setNoResult] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filterType, setFilterType] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
 
   useEffect(() => {
     const FetchProducts = async () => {
@@ -42,37 +44,37 @@ function Products() {
   }, [categoryProp]);
 
   const handleSearch = () => {
+    let temp = [...product];
 
-let temp = [...product];
+    // if (categoryProp) {
+    //   temp = temp.filter((p) => p.category === categoryProp);
+    // }
 
-if (categoryProp){
-  temp = temp.filter((p) => p.category === categoryProp)
-}
+    if (search.trim() === "") {
+      setFilteredProducts(temp);
+      setNoResult(false);
+      return;
+    }
 
-if (search.trim() === "")
-{
-  setFilteredProducts(temp)
-  setNoResult(false);
-  return
-}
+    const searched = temp.filter((p) =>
+      p.name.toLowerCase().includes(search.toLowerCase())
+    );
 
-const searched = temp.filter( (p) => p.name.toLowerCase().includes(search.toLowerCase()))
+    if (searched.length === 0) {
+      setFilteredProducts([]);
+      setNoResult(true);
+    } else {
+      setFilteredProducts(searched);
+      setNoResult(false);
+    }
 
-if(searched.length === 0){
-  setFilteredProducts([])
-    setNoResult(true)
-  
-}else{
-  setFilteredProducts(searched)
-  setNoResult(false)
-}
+    setCurrentPage(1);
 
   };
 
-
-const handleFilter = (type) => {
+  const handleFilter = (type) => {
     setFilterType(type);
-    setShowFilter(false); 
+    setShowFilter(false);
 
     const sorted = [...filteredProducts].sort((a, b) => {
       if (type === "lowToHigh") return a.price - b.price;
@@ -83,19 +85,15 @@ const handleFilter = (type) => {
     setFilteredProducts(sorted);
   };
 
-const handleCategory =(category)=> {
+  const handleCategory = (category) => {
+    let temp = [...product];
 
-let temp = [...product];
-
-if (category){
-  temp = temp.filter((p) => p.category === category)
-}
-setFilteredProducts(temp)
-return
-}
-
-
-
+    if (category) {
+      temp = temp.filter((p) => p.category === category);
+    }
+    setFilteredProducts(temp);
+    return;
+  };
 
   if (loading) {
     return (
@@ -108,11 +106,19 @@ return
     );
   }
 
+  
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
   return (
     <>
       <div className="w-full bg-white border-b border-gray-200 relative">
         <div className="flex items-center gap-4 px-4 py-3">
-  
           <div className="relative">
             <button
               onClick={() => setShowFilter((prev) => !prev)}
@@ -123,7 +129,6 @@ return
               <ChevronDown size={16} />
             </button>
 
-            
             {showFilter && (
               <div className="absolute mt-2 bg-white shadow-lg rounded-md border w-48 z-10">
                 <button
@@ -142,7 +147,6 @@ return
             )}
           </div>
 
-      
           <div className="flex-1 relative max-w-5xl">
             <input
               type="text"
@@ -168,59 +172,101 @@ return
           </button>
         </div>
       </div>
-{/* Category Buttons */}
-<div className="flex flex-wrap justify-center gap-3 my-6">
-  <button
-    onClick={() => { setFilteredProducts(product); return; }}
-    className="px-5 py-2 rounded-full bg-gray-800 border border-gray-300 text-white 
+      
+      <div className="flex flex-wrap justify-center gap-3 my-6">
+        <button
+          onClick={() => {
+            setFilteredProducts(product);
+            return;
+          }}
+          className="px-5 py-2 rounded-full bg-gray-800 border border-gray-300 text-white 
                hover:bg-gray-600 hover:text-white transition-all duration-300 
                shadow-sm hover:shadow-md"
-  >
-    All
-  </button>
+        >
+          All
+        </button>
 
-  <button
-    onClick={() => handleCategory("men")}
-    className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
+        <button
+          onClick={() => handleCategory("men")}
+          className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
                hover:bg-gray-800 hover:text-white transition-all duration-300 
                shadow-sm hover:shadow-md"
-  >
-    Men
-  </button>
+        >
+          Men
+        </button>
 
-  <button
-    onClick={() => handleCategory("women")}
-    className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
+        <button
+          onClick={() => handleCategory("women")}
+          className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
                hover:bg-gray-800 hover:text-white transition-all duration-300 
                shadow-sm hover:shadow-md"
-  >
-    Women
-  </button>
+        >
+          Women
+        </button>
 
-  <button
-    onClick={() => handleCategory("unisex")}
-    className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
+        <button
+          onClick={() => handleCategory("unisex")}
+          className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
                hover:bg-gray-800 hover:text-white transition-all duration-300 
                shadow-sm hover:shadow-md"
-  >
-    Unisex
-  </button>
-</div>
-
-    
-      <div className="p-4">
-        {noResult ? (
-          <h2 className="text-center text-gray-500 text-lg">No products found</h2>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-            {filteredProducts.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        )}
+        >
+          Unisex
+        </button>
       </div>
 
-      
+      <div className="p-4">
+        {noResult ? (
+          <h2 className="text-center text-gray-500 text-lg">
+            No products found
+          </h2>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+              {currentProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center mt-8 space-x-2">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
+                >
+                  Prev
+                </button>
+
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(index + 1)}
+                    className={`px-3 py-2 rounded ${
+                      currentPage === index + 1
+                        ? "bg-gray-800 text-white"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 }

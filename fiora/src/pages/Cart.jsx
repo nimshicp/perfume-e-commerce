@@ -54,7 +54,7 @@ function Cart() {
           <p className="text-gray-600 mb-6">Add some items to get started</p>
           <Link
             to="/products"
-            className="inline-flex items-center justify-center bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
+            className="inline-flex items-center justify-center bg-gray-800 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Continue Shopping
