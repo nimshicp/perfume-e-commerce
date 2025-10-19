@@ -69,7 +69,7 @@ function OrderConfirmation() {
             </Link>
             <Link
               to="/products"
-              className="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center"
+              className="border border-gray-300 text-gray-800 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Continue Shopping

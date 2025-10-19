@@ -16,6 +16,7 @@ import About from "./pages/About";
 import  Contact  from  "./pages/Contact";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
+import Profile from "./pages/Profile";
 
 
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/products" element={<Products/>} />
         <Route path="/about" element={<About/>}/>
         <Route path = "/contact" element={<Contact/>}/>
+        <Route path="/profile" element={<Profile/>}/>
         <Route path ="/products/:id" element={<ProductDetails/>}/>
         <Route path="/cart" element = {<Cart/>}/>
         <Route path="/wishlist" element ={<Wishlist/>}/>

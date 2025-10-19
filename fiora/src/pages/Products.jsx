@@ -69,7 +69,6 @@ function Products() {
     }
 
     setCurrentPage(1);
-
   };
 
   const handleFilter = (type) => {
@@ -85,9 +84,6 @@ function Products() {
     setFilteredProducts(sorted);
     setCurrentPage(1);
   };
-
-
-
 
   const handleCategory = (category) => {
     let temp = [...product];
@@ -111,7 +107,6 @@ function Products() {
     );
   }
 
-  
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -127,7 +122,9 @@ function Products() {
           <div className="relative">
             <button
               onClick={() => setShowFilter((prev) => !prev)}
-              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded border"
+              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-500 border border-gray-300
+
+              rounded focus:outline-none focus:border-gray-400 bg-white text-sm"
             >
               <Menu size={18} />
               <span className="text-sm font-medium">Filter</span>
@@ -155,16 +152,11 @@ function Products() {
           <div className="flex-1 relative max-w-5xl">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search "
               onChange={(e) => setSearch(e.target.value)}
               value={search}
               className="w-full pl-4 pr-16 py-2 border border-gray-300
-              
-              
-              
-              
-              
-              
+
               rounded focus:outline-none focus:border-gray-400 bg-white text-sm"
             />
           </div>
@@ -177,7 +169,7 @@ function Products() {
           </button>
         </div>
       </div>
-      
+
       <div className="flex flex-wrap justify-center gap-3 my-6">
         <button
           onClick={() => {

@@ -193,8 +193,12 @@ const cancelOrder = async (orderId) => {
     return orders.find((order) => order.id === orderId) || null;
   };
 
+
+
+  const orders = user?.orders || [];
+
   return (
-    <OrderContext.Provider value={{ createOrder, getUserOrders, getOrderById , cashOnDelivery,processUPIPayment,cancelOrder}}>
+    <OrderContext.Provider value={{ createOrder, getUserOrders, getOrderById , cashOnDelivery,processUPIPayment,cancelOrder,orders}}>
       {children}
     </OrderContext.Provider>
   );

@@ -18,10 +18,6 @@ function ProductCard({ product }) {
   const isInCart = cart.some((item) => item.id === product.id);
   const [GoToCart, setGoToCart] = useState(isInCart);
 
-  // const handleClick = () => {
-  //   navigate(`/products/${product.id}`, { state: { product } });
-  // };
-
   const ToggleEffect = async () => {
     if (!user) {
       toast.error("please login to save items");
@@ -58,10 +54,10 @@ function ProductCard({ product }) {
 
   const handleBuyNow = (e) => {
     e.stopPropagation();
-    if (!user) {
-      toast.error("Please login to buy items");
-      return;
-    }
+    // if (!user) {
+    //   toast.error("Please login to buy items");
+    //   return;
+    // }
     navigate(`/products/${product.id}`, { state: { product } });
   };
 
@@ -92,20 +88,19 @@ function ProductCard({ product }) {
           <h3 className="font-semibold text-lg text-gray-800 mb-2">
             {product.name}
           </h3>
-        <div className="flex items-center gap-2 mb-1">
-  <span
-    className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-      product.stock > 10
-        ? "bg-green-100 text-green-800"
-        : product.stock > 0
-        ? "bg-yellow-100 text-yellow-800"
-        : "bg-red-100 text-red-800"
-    }`}
-  >
-    {product.stock > 0 ? `${product.stock} left` : "Out of Stock"}
-  </span>
-</div>
-
+          <div className="flex items-center gap-2 mb-1">
+            <span
+              className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                product.stock > 10
+                  ? "bg-green-100 text-green-800"
+                  : product.stock > 0
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {product.stock > 0 ? `${product.stock} left` : "Out of Stock"}
+            </span>
+          </div>
 
           <div className="flex items-center justify-between mb-3">
             <span className="text-1xl font-bold text-gray-900">
@@ -137,7 +132,7 @@ function ProductCard({ product }) {
             onClick={handleBuyNow}
             className="flex-1 bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
           >
-            Buy Now
+            View Product
           </button>
         </div>
       </div>

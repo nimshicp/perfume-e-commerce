@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { useShop } from "../context/ShopContext";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/userContext";
 import { useWishlist } from "../context/WishlistContext";
 import toast from "react-hot-toast";
 
@@ -15,9 +15,30 @@ function Wishlist() {
 const navigate = useNavigate();
 
 
-  if (!user) {
-    return null;
+ if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8 text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Heart className="w-8 h-8 text-gray-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Login Required
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Please login in to view your Wishlist
+          </p>
+          <Link
+            to="/login"
+            className="inline-flex items-center justify-center bg-gray-800 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
+          >
+            Login
+          </Link>
+        </div>
+      </div>
+    );
   }
+
 
   if (!wishlist || wishlist.length === 0) {
     return (

@@ -5,7 +5,18 @@
       "Username": "nimshi",
       "email": "nimshicp2003@gmail.com",
       "password": "12345678",
-      "cart": [],
+      "cart": [
+        {
+          "id": "3",
+          "name": "Universal Harmony",
+          "price": 95.99,
+          "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+          "category": "unisex",
+          "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+          "stock": 9,
+          "quantity": 1
+        }
+      ],
       "wishlist": [],
       "orders": [
         {
@@ -256,6 +267,44 @@
       ],
       "wishlist": [],
       "orders": []
+    },
+    {
+      "id": "2b9a",
+      "Username": "nafiya",
+      "email": "nafiya2003@gmail.com",
+      "password": "11111111",
+      "cart": [],
+      "wishlist": [],
+      "orders": [
+        {
+          "id": 1760882121917,
+          "userId": "2b9a",
+          "items": [
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 9,
+              "quantity": 1
+            }
+          ],
+          "total": 95.99,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "cash on delivery",
+          "paymentStatus": "pending",
+          "customerInfo": {
+            "name": "Nafiya",
+            "email": "nafiya2003@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-10-19T13:55:21.917Z",
+          "updatedAt": "2025-10-19T13:55:26.308Z"
+        }
+      ]
     }
   ],
   "products": [
@@ -284,7 +333,7 @@
       "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
       "category": "unisex",
       "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
-      "stock": 9
+      "stock": 8
     },
     {
       "id": "4",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useOrder } from "../context/OrderContext";
 import { useShop } from "../context/ShopContext";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -137,7 +137,7 @@ function CheckOut() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+                className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 disabled:opacity-50"
                 onClick={() => toast.success("continue payment")}
               >
                 {loading

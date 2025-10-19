@@ -40,11 +40,11 @@ function Cart() {
             Login Required
           </h2>
           <p className="text-gray-600 mb-6">
-            Please sign in to view your shopping cart
+            Please login in to view your shopping cart
           </p>
           <Link
             to="/login"
-            className="inline-flex items-center justify-center bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
+            className="inline-flex items-center justify-center bg-gray-800 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
           >
             Login
           </Link>
@@ -185,7 +185,7 @@ function Cart() {
             </button>
             <button
               onClick={() => navigate("/checkout")}
-              className="flex-1 bg-black text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"
+              className="flex-1 bg-gray-800 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"
             >
               proceed to checkout
             </button>

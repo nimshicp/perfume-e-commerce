@@ -62,7 +62,7 @@ function OrderHistory() {
           </p>
           <Link
             to="/products"
-            className="inline-block bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+            className="inline-block bg-gray-800 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors"
           >
             Start Shopping
           </Link>
@@ -75,7 +75,7 @@ function OrderHistory() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Order History
           </h1>
           <p className="text-gray-600">
