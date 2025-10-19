@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand */}
+          
           <div className="flex-shrink-0">
             <Link
               to="/"
@@ -33,7 +33,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Menu */}
+        
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="hover:text-gray-900 text-gray-600">
               HOME
@@ -49,9 +49,9 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Icons & User Section (Desktop) */}
+          
           <div className="hidden md:flex items-center space-x-5">
-            {/* Wishlist */}
+            
             <div className="relative cursor-pointer" onClick={() => navigate("/wishlist")}>
               <Heart size={22} className="text-gray-700 hover:text-gray-900" />
               {wishlist.length > 0 && (
@@ -61,12 +61,12 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Orders */}
+      
             <div className="relative cursor-pointer" onClick={() => navigate("/orders")}>
               <ShoppingBag size={22} className="text-gray-700 hover:text-gray-900" />
             </div>
 
-            {/* Cart */}
+          
             <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
               <ShoppingCart size={22} className="text-gray-700 hover:text-gray-900" />
               {cartItemsCount > 0 && (
@@ -76,7 +76,7 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* User Profile */}
+            
             {user ? (
               <>
                 <div
@@ -108,7 +108,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
+          
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden text-gray-800 hover:text-gray-900 focus:outline-none"
@@ -118,7 +118,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+    
       {menuOpen && (
         <div className="md:hidden bg-white shadow-md px-4 pb-4 space-y-3">
           <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-gray-900">
@@ -134,10 +134,10 @@ const Navbar = () => {
             CONTACT
           </Link>
 
-          {/* Divider */}
+      
           <div className="border-t border-gray-200 my-3"></div>
 
-          {/* Mobile Icons */}
+        
           <div className="flex items-center justify-around text-gray-700">
             <Heart
               size={22}
@@ -173,7 +173,7 @@ const Navbar = () => {
             />
           </div>
 
-          {/* Login / Logout */}
+          
           <div className="pt-3 text-center">
             {user ? (
               <button

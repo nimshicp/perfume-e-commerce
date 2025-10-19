@@ -274,7 +274,17 @@
       "email": "nafiya2003@gmail.com",
       "password": "11111111",
       "cart": [],
-      "wishlist": [],
+      "wishlist": [
+        {
+          "id": "2",
+          "name": "Noir Mystique",
+          "price": 79.99,
+          "image": "https://images.pexels.com/photos/13882813/pexels-photo-13882813.jpeg",
+          "category": "men",
+          "description": "A bold and mysterious scent with dark amber, leather, and sandalwood notes. Ideal for the modern gentleman who commands attention.",
+          "stock": 10
+        }
+      ],
       "orders": [
         {
           "id": 1760882121917,

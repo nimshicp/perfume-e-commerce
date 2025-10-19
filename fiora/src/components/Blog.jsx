@@ -6,13 +6,20 @@ const Blog = () => {
       <div className="max-w-5xl mx-auto">
         
         
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-light text-gray-800 mb-4 tracking-tight">
-            Our Fragrance Story
-          </h2>
-          <div className="w-32 h-1 bg-gradient-to-r from-pink-400 to-pink-600 mx-auto rounded-full"></div>
-        </div>
-
+       <div className="text-center mb-24">
+  <div className="relative">
+    <h2 className="text-5xl font-thin text-gray-900 mb-2 tracking-widest font-serif">
+      OUR FRAGRANCE STORY
+    </h2>
+    <div className="text-rose-400 text-sm tracking-widest mb-6 font-sans">
+      ESTABLISHED 2024
+    </div>
+  </div>
+  <div className="w-36 h-0.5 bg-gradient-to-r from-gray-200 via-rose-300 to-gray-200 mx-auto rounded-full mb-8"></div>
+  <p className="text-gray-500 text-lg font-light max-w-2xl mx-auto leading-relaxed">
+    From humble beginnings to creating scents that capture life's most precious moments
+  </p>
+</div>
         
         <div className="flex flex-col lg:flex-row items-center gap-16">
           

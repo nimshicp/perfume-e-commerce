@@ -29,10 +29,26 @@ function Profile() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-light text-gray-900 mb-3">My Profile</h1>
-          <p className="text-gray-600">Customer information and stats</p>
-        </div>
+       <div className="text-center mb-16">
+
+  <div className="relative inline-block">
+    <h2 className="text-5xl font-thin text-gray-900 mb-6 tracking-widest font-serif">
+     My Profile
+    </h2>
+    
+    
+  </div>
+
+ 
+  
+  <div className="flex items-center justify-center space-x-3">
+    <div className="w-2 h-2 bg-pink-200 rounded-full animate-pulse"></div>
+    <div className="w-3 h-3 bg-pink-300 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+    <div className="w-4 h-4 bg-pink-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+    <div className="w-3 h-3 bg-pink-300 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+    <div className="w-2 h-2 bg-pink-200 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }}></div>
+  </div>
+</div>
 
         <div className="grid lg:grid-cols-3 gap-8">
     
