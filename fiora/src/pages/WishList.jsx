@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { useUser } from "../context/UserContext";
@@ -10,6 +10,10 @@ function Wishlist() {
   const { user } = useUser();
   const { addToCart } = useShop();
   const { wishlist, removeFromWishList } = useWishlist();
+
+
+const navigate = useNavigate();
+
 
   if (!user) {
     return null;
@@ -39,11 +43,12 @@ function Wishlist() {
             key={product.id}
             className="flex justify-between items-center p-4 border rounded-lg"
           >
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4" onClick={() => navigate(`/products/${product.id}`, { state: { product: product} })}>
               <img
                 src={product.image}
                 alt={product.name}
                 className="w-12 h-12 object-cover rounded"
+                
               />
               <div>
                 <h3 className="font-semibold">{product.name}</h3>

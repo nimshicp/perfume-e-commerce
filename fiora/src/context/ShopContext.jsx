@@ -37,20 +37,6 @@ export const ShopProvider = ({ children }) => {
 
 
 
-// const UpdateProductStock = async (updatedProduct) => {
-//   try {
-    
-//     await axios.patch(`http://localhost:5000/products/${updatedProduct.id}`, updatedProduct);
-
-  
-//   } catch (err) {
-//     console.error("Failed to update product stock", err);
-//     toast.error("Failed to update stock");
-//   }
-// };
-
-
-
 
 
 useEffect(() => {
@@ -78,18 +64,13 @@ useEffect(() => {
       return null;
     }
 
-    if(product.stock<quantity){
-      toast.error("not enough stock is available")
-    }
+    
 
     const currentCart = user.cart || [];
     const existingItem = currentCart.find((item) => item.id === product.id);
 
     let newCart;
     if (existingItem) {
-if(existingItem.quantity>product.stock){
-  toast.error("not enough stock is available")
-}
 
       newCart = currentCart.map((item) =>
         item.id === product.id
@@ -99,9 +80,6 @@ if(existingItem.quantity>product.stock){
     } else {
       newCart = [...currentCart, { ...product, quantity }];
     }
-
-  //   const updatedProduct = { ...product, stock: product.stock - quantity };
-  // await UpdateProductStock(updatedProduct); 
 
   return await UpdateDb({ cart: newCart });
     

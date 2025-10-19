@@ -1,10 +1,16 @@
 import React from "react";
 import { useShop } from "../context/ShopContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, CreditCard } from "lucide-react";
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ShoppingBag,
+  ArrowLeft,
+  CreditCard,
+} from "lucide-react";
 import toast from "react-hot-toast";
-
 
 function Cart() {
   const { user } = useUser();
@@ -18,11 +24,11 @@ function Cart() {
     createOrder,
   } = useShop();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  
 
   const cartLength = cart?.length || 0;
 
-  
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -30,8 +36,12 @@ function Cart() {
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <ShoppingBag className="w-8 h-8 text-gray-400" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h2>
-          <p className="text-gray-600 mb-6">Please sign in to view your shopping cart</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Login Required
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Please sign in to view your shopping cart
+          </p>
           <Link
             to="/login"
             className="inline-flex items-center justify-center bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
@@ -50,7 +60,9 @@ function Cart() {
           <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <ShoppingBag className="w-10 h-10 text-gray-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Your cart is empty
+          </h1>
           <p className="text-gray-600 mb-6">Add some items to get started</p>
           <Link
             to="/products"
@@ -64,14 +76,17 @@ function Cart() {
     );
   }
 
+ 
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-2xl">
-      
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-            <p className="text-gray-600 mt-1">{cartItemsCount} {cartItemsCount === 1 ? 'item' : 'items'}</p>
+            <p className="text-gray-600 mt-1">
+              {cartItemsCount} {cartItemsCount === 1 ? "item" : "items"}
+            </p>
           </div>
           <Link
             to="/products"
@@ -82,7 +97,6 @@ function Cart() {
           </Link>
         </div>
 
-  
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
           <div className="space-y-4">
             {cart?.map((item) => (
@@ -94,18 +108,25 @@ function Cart() {
                   src={item.image}
                   alt={item.name}
                   className="w-16 h-16 object-cover rounded-lg"
+                  onClick={() => navigate(`/products/${item.id}`, { state: { product: item } })}
+
                 />
-                
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
+
+                <div className="flex-1 min-w-0" onClick={() => navigate(`/products/${item.id}`, { state: { product: item } })}
+>
+                  <h3 className="font-semibold text-gray-900 truncate">
+                    {item.name}
+                  </h3>
                   <p className="text-gray-600">${item.price}</p>
                 </div>
 
                 <div className="flex items-center gap-3">
-              
                   <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1">
                     <button
-                      onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                      onClick={(e) => {
+            e.stopPropagation();
+            updateCartQuantity(item.id, item.quantity - 1);
+          }}
                       className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white transition-colors"
                     >
                       <Minus className="w-4 h-4" />
@@ -114,21 +135,26 @@ function Cart() {
                       {item.quantity}
                     </span>
                     <button
-                      onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                      onClick={(e) => {
+            e.stopPropagation();
+            updateCartQuantity(item.id, item.quantity + 1);
+          }}
                       className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
 
-              
                   <div className="w-20 text-right font-semibold text-gray-900">
                     ${(item.price * item.quantity).toFixed(2)}
                   </div>
 
-    
                   <button
-                    onClick={() =>{ removeFromCart(item.id) ;toast.success(`${item.name} removed from cart`);}}
+                    onClick={(e) => {
+          e.stopPropagation();
+          removeFromCart(item.id);
+          toast.success(`${item.name} removed from cart`);
+        }}
                     className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                     title="Remove item"
                   >
@@ -140,10 +166,11 @@ function Cart() {
           </div>
         </div>
 
-    
         <div className="bg-white rounded-2xl shadow-sm p-6">
           <div className="flex justify-between items-center mb-6">
-            <span className="text-lg font-semibold text-gray-900">Total Amount</span>
+            <span className="text-lg font-semibold text-gray-900">
+              Total Amount
+            </span>
             <span className="text-2xl font-bold text-gray-900">
               ${cartTotal.toFixed(2)}
             </span>
@@ -157,7 +184,7 @@ function Cart() {
               Clear All
             </button>
             <button
-              onClick={()=> navigate("/checkout")}
+              onClick={() => navigate("/checkout")}
               className="flex-1 bg-black text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"
             >
               proceed to checkout

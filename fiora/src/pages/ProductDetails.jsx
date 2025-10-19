@@ -20,11 +20,13 @@ function ProductDetails() {
   const product = location.state?.product;
   const { addToCart, updateCartQuantity, cart } = useShop();
   const { user } = useUser();
-  const [added, setAdded] = useState(false);
 
-  const isInCart = cart.some((item) => item.id === product.id);
+  const cartItem = cart.find((item) => item.id === product.id);
+const quantity = cartItem ? cartItem.quantity : 1;
 
-  const [quantity, setQuantity] = useState(1);
+const isInCart = cart.some((item) => item.id === product.id);
+
+  
 
   const { addToWishList, removeFromWishList, isWishList } = useWishlist();
 
@@ -55,26 +57,21 @@ function ProductDetails() {
 
   const handleAddToCart = () => {
     addToCart(product, 1);
-    setAdded(true);
+    
   };
 
-  const handleIncrease = () => {
-    const newQty = quantity + 1;
-    setQuantity(newQty);
-    updateCartQuantity(product.id, newQty);
-  };
+ const handleIncrease = () => {
+  updateCartQuantity(product.id, quantity + 1);
+};
 
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      const newQty = quantity - 1;
-      setQuantity(newQty);
-      updateCartQuantity(product.id, newQty);
-    } else {
-      updateCartQuantity(product.id, 0);
-      setAdded(false);
-      setQuantity(1);
-    }
-  };
+const handleDecrease = () => {
+  if (quantity > 1) {
+    updateCartQuantity(product.id, quantity - 1);
+  } else {
+  
+    updateCartQuantity(product.id, 0);
+  }
+};
 
 
 
@@ -167,7 +164,7 @@ if (!product) {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                {!added && !isInCart ? (
+                {!isInCart ? (
                   <button
                     className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"
                     onClick={handleAddToCart}

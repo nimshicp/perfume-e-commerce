@@ -83,7 +83,11 @@ function Products() {
     });
 
     setFilteredProducts(sorted);
+    setCurrentPage(1);
   };
+
+
+
 
   const handleCategory = (category) => {
     let temp = [...product];
@@ -92,6 +96,7 @@ function Products() {
       temp = temp.filter((p) => p.category === category);
     }
     setFilteredProducts(temp);
+    setCurrentPage(1);
     return;
   };
 

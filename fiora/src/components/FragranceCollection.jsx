@@ -14,7 +14,7 @@ navigate("/products",{state:{category}});
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         
-       {/* Heading */}
+      
         <div className="text-center mb-16">
           <h2 className="text-5xl font-light text-gray-800 mb-4 tracking-tight">
             Our Fragrance Collections
