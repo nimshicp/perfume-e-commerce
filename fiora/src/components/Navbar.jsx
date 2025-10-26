@@ -19,6 +19,8 @@ const Navbar = () => {
   const { cartItemsCount } = useShop();
   const { wishlist } = useWishlist();
 
+  const isAdmin = user?.role === "admin" || false;
+
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,7 +79,7 @@ const Navbar = () => {
             </div>
 
             
-            {user ? (
+            {user  ? (
               <>
                 <div
                   onClick={() => navigate("/profile")}
@@ -88,6 +90,18 @@ const Navbar = () => {
                      {user.Username}
                   </span>
                 </div>
+{isAdmin && <button
+                  onClick={() => {
+            
+                    navigate("/dashboard");
+                  }}
+                  className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                >
+                  Admin
+                </button>}
+
+
+
                 <button
                   onClick={() => {
                     logout();

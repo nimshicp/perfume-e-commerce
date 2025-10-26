@@ -28,7 +28,7 @@ function ProductDetails() {
   const quantity = cartItem ? cartItem.quantity : 1;
 
   const isInCart = cart.some((item) => item.id === product.id);
-  const [GoToCart, setGoToCart] = useState(isInCart);
+ 
 
   const { addToWishList, removeFromWishList, isWishList } = useWishlist();
 
@@ -55,9 +55,12 @@ function ProductDetails() {
   const handleAddToCart = () => {
     if (!user) {
       toast.error("please login to add items to cart");
+    }else{
+addToCart(product, 1);
+    toast.success(`${product.name} added to cart`)
     }
-    addToCart(product, 1);
-    setGoToCart(true);
+    
+    
   };
 
   const handleIncrease = () => {
@@ -110,9 +113,9 @@ function ProductDetails() {
                       ? "bg-white text-pink-500"
                       : "bg-white text-gray-600 hover:bg-gray-50"
                   }`}
-                  title={
-                    isWishListed ? "Remove from wishlist" : "Add to wishlist"
-                  }
+                  // title={
+                  //   isWishListed ? "Remove from wishlist" : "Add to wishlist"
+                  // }
                 >
                   <Heart
                     size={20}
@@ -193,7 +196,7 @@ function ProductDetails() {
               )}
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                {GoToCart && isInCart ? (
+                { isInCart ? (
                   <button
                     className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"
                     onClick={handleGoToCart}

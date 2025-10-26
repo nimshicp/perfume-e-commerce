@@ -68,6 +68,7 @@ function ProductCard({ product }) {
           src={product.image}
           alt={product.name}
           className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+          onClick={handleBuyNow}
         />
 
         <button
@@ -77,7 +78,7 @@ function ProductCard({ product }) {
               ? "bg-white text-pink-500"
               : "bg-white text-gray-600 hover:bg-white "
           } `}
-          title={isWishListed ? "Remove from wishlist" : "Add to wishlist"}
+          // title={isWishListed ? "Remove from wishlist" : "Add to wishlist"}
         >
           <Heart size={20} fill={isWishListed ? "currentColor" : "none"} />
         </button>
@@ -128,12 +129,12 @@ function ProductCard({ product }) {
               Add to Cart
             </button>
           )}
-          <button
+          {/* <button
             onClick={handleBuyNow}
             className="flex-1 bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
           >
             View Product
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

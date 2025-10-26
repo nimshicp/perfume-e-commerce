@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import Home from "./pages/Home";
-import { createBrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";
+import { createBrowserRouter, Route, RouterProvider, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -17,16 +17,36 @@ import  Contact  from  "./pages/Contact";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import Profile from "./pages/Profile";
+import ScrollToTop from "./components/ScrollToTop";
+import AdminLayout from "./Admin/AdminLayout";
+import AdminDashboard from "./Admin/AdminDashboard";
+import AdminProducts from "./Admin/AdminProducts";
+import AdminOrders from "./Admin/AdminOrders";
+import AdminUsers from "./Admin/AdminUsers";
+
+
+
+
+
 
 
 
 
 function App() {
- 
+  const location = useLocation()
+  const isAdmin = location.pathname.startsWith("/dashboard");
+
   return (
-    <div>
-    
-      <Navbar/>
+
+
+
+    <div className="flex flex-col min-h-screen">
+  
+    <ScrollToTop/>
+  
+     {!isAdmin && <Navbar />}
+
+      <div className="flex-grow">
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/register" element={<Register/>} />
@@ -42,10 +62,20 @@ function App() {
         <Route path="/payment/:orderId" element={<PaymentPage/>}/>
         <Route path ="/order-confirmation/:orderId" element={<OrderConfirmation/>}/>
         <Route path="/orders" element={<OrderHistory/>}/>
+      
+        
+       <Route path="/dashboard/*" element={<AdminLayout />}>
+  <Route index element={<AdminDashboard />} />
+  <Route path="products" element={<AdminProducts />} />
+  <Route path="orders" element={<AdminOrders />} />
+  <Route path="users" element={<AdminUsers />} />
+</Route>
+
         
 
       </Routes>
-      < Footer/>
+      </div>
+     {!isAdmin && < Footer/>}
     
     </div>
   );

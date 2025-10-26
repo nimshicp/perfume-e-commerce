@@ -102,12 +102,15 @@ const restoreStock = async (items) => {
         if (order.id === orderId) {
           reduceStock(order.items)
           return {
-            ...order,
-            paymentMethod: "UPI",
-            paymentStatus: "paid",
-            status: "confirmed",
-            paidAt: new Date().toISOString,
-            updatedAt: new Date().toISOString(),
+        
+  ...order,
+  paymentMethod: "UPI",
+  paymentStatus: "paid",
+  status: "confirmed",
+  paidAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  createdAt: order.createdAt, // 👈 keep original
+
           };
         }
         return order;
@@ -134,6 +137,7 @@ const restoreStock = async (items) => {
             paymentStatus: "pending",
             status: "confirmed",
             updatedAt: new Date().toISOString(),
+            createdAt: order.createdAt,
           };
         }
         return order;
@@ -165,6 +169,7 @@ const cancelOrder = async (orderId) => {
           paymentStatus: order.paymentStatus === 'paid' ? 'refunded' : 'cancelled',
           cancelledAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
+          
         };
       }
       return order;

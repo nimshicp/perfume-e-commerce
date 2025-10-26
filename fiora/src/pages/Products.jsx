@@ -18,6 +18,17 @@ function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
+
+ 
+
+useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}, [currentPage]);
+
+
   useEffect(() => {
     const FetchProducts = async () => {
       try {

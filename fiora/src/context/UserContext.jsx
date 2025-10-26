@@ -45,6 +45,9 @@ try{
 
 const newUser ={
     ...userData,
+    role: userData.email.includes('admin') ? 'admin' : 'user', 
+    isActive: true,
+    isBlock: false, 
     cart:[],
     wishlist:[],
     orders:[]

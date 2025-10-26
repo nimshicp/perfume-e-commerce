@@ -5,18 +5,7 @@
       "Username": "nimshi",
       "email": "nimshicp2003@gmail.com",
       "password": "12345678",
-      "cart": [
-        {
-          "id": "3",
-          "name": "Universal Harmony",
-          "price": 95.99,
-          "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
-          "category": "unisex",
-          "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
-          "stock": 9,
-          "quantity": 1
-        }
-      ],
+      "cart": [],
       "wishlist": [],
       "orders": [
         {
@@ -236,37 +225,8 @@
       "password": "123456789",
       "cart": [],
       "wishlist": [],
-      "orders": []
-    },
-    {
-      "id": "d973",
-      "Username": "joker",
-      "email": "joker@gmail.com",
-      "password": "12345678",
-      "cart": [
-        {
-          "id": "3",
-          "name": "Universal Harmony",
-          "price": 95.99,
-          "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
-          "category": "unisex",
-          "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
-          "stock": 10,
-          "quantity": 1
-        },
-        {
-          "id": "4",
-          "name": "Vanilla Dream",
-          "price": 75.99,
-          "image": "https://images.pexels.com/photos/28843743/pexels-photo-28843743.jpeg",
-          "category": "women",
-          "description": "Sweet and comforting fragrance with Madagascar vanilla, tonka bean, and soft floral undertones. Like a warm embrace in a bottle.",
-          "stock": 10,
-          "quantity": 1
-        }
-      ],
-      "wishlist": [],
-      "orders": []
+      "orders": [],
+      "isBlocked": false
     },
     {
       "id": "2b9a",
@@ -274,17 +234,7 @@
       "email": "nafiya2003@gmail.com",
       "password": "11111111",
       "cart": [],
-      "wishlist": [
-        {
-          "id": "2",
-          "name": "Noir Mystique",
-          "price": 79.99,
-          "image": "https://images.pexels.com/photos/13882813/pexels-photo-13882813.jpeg",
-          "category": "men",
-          "description": "A bold and mysterious scent with dark amber, leather, and sandalwood notes. Ideal for the modern gentleman who commands attention.",
-          "stock": 10
-        }
-      ],
+      "wishlist": [],
       "orders": [
         {
           "id": 1760882121917,
@@ -313,20 +263,118 @@
           },
           "createdAt": "2025-10-19T13:55:21.917Z",
           "updatedAt": "2025-10-19T13:55:26.308Z"
+        },
+        {
+          "id": 1761211568576,
+          "userId": "2b9a",
+          "items": [
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 8,
+              "quantity": 1
+            }
+          ],
+          "total": 95.99,
+          "status": "shipped",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "",
+          "paymentStatus": "pending",
+          "customerInfo": {
+            "name": "nafiya",
+            "email": "nafiya2003@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-10-23T09:26:08.576Z",
+          "updatedAt": "2025-10-23T09:26:08.577Z"
+        }
+      ]
+    },
+    {
+      "id": "78c1",
+      "Username": "Farhan",
+      "email": "farhan@gmail.com",
+      "password": "12345678",
+      "isAdmin": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "123f",
+      "Username": "zayan",
+      "email": "admin@gmail.com",
+      "password": "12345678",
+      "role": "admin",
+      "isActive": true,
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": [
+        {
+          "id": 1761196082403,
+          "userId": "123f",
+          "items": [
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 8,
+              "quantity": 1
+            }
+          ],
+          "total": 95.99,
+          "status": "delivered",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "UPI",
+          "paymentStatus": "paid",
+          "customerInfo": {
+            "name": "Zayan",
+            "email": "admin@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-10-23T05:08:02.403Z",
+          "updatedAt": "2025-10-23T05:08:28.011Z"
+        },
+        {
+          "id": 1761199462233,
+          "userId": "123f",
+          "items": [
+            {
+              "id": "4",
+              "name": "Vanilla Dream",
+              "price": 75.99,
+              "image": "https://images.pexels.com/photos/28843743/pexels-photo-28843743.jpeg",
+              "category": "women",
+              "description": "Sweet and comforting fragrance with Madagascar vanilla, tonka bean, and soft floral undertones. Like a warm embrace in a bottle.",
+              "stock": 10,
+              "quantity": 1
+            }
+          ],
+          "total": 75.99,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "",
+          "paymentStatus": "pending",
+          "customerInfo": {
+            "name": "Nimshi cp",
+            "email": "admin@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-10-23T06:04:22.233Z",
+          "updatedAt": "2025-10-23T06:04:22.234Z"
         }
       ]
     }
   ],
   "products": [
-    {
-      "id": "1",
-      "name": "Rose Elegance",
-      "price": 89.99,
-      "image": "https://images.pexels.com/photos/1961791/pexels-photo-1961791.jpeg",
-      "category": "women",
-      "description": "A delicate and romantic fragrance featuring notes of Bulgarian rose, peony, and white musk. Perfect for special occasions and evening wear.",
-      "stock": 10
-    },
     {
       "id": "2",
       "name": "Noir Mystique",
@@ -497,6 +545,15 @@
       "category": "men",
       "description": "Intense amber and sandalwood fragrance with a hint of spice. Bold and captivating for evening and formal occasions.",
       "stock": 10
+    },
+    {
+      "name": "Dior",
+      "price": 100,
+      "stock": 12,
+      "category": "unisex",
+      "description": "Sweet and comforting fragrance with Madagascar vanilla, tonka bean, and soft floral undertones. Like a warm embrace in a bottle.",
+      "image": "https://images.pexels.com/photos/1961791/pexels-photo-1961791.jpeg",
+      "id": "1761126625479"
     }
   ]
 }
