@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Heart, ShoppingCart, Trash2 } from "lucide-react";
+import { ArrowLeft, Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { useUser } from "../context/userContext";
 import { useWishlist } from "../context/WishlistContext";
@@ -40,14 +40,26 @@ const navigate = useNavigate();
   }
 
 
-  if (!wishlist || wishlist.length === 0) {
+
+ if (!wishlist || wishlist.length === 0) {
     return (
-      <div className="p-8 text-center">
-        <Heart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h1 className="text-xl font-bold mb-2">Wishlist Empty</h1>
-        <Link to="/products" className="text-blue-500">
-          Shop Products
-        </Link>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8 text-center">
+          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Heart className="w-10 h-10 text-gray-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Your wishlist is empty
+          </h1>
+          <p className="text-gray-600 mb-6">Add some items to get started</p>
+          <Link
+            to="/products"
+            className="inline-flex items-center justify-center bg-gray-800 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Continue Shopping
+          </Link>
+        </div>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-// components/AdminOrders.jsx
+
 import React, { useState, useEffect } from "react";
 import {
   ShoppingBag,
@@ -16,7 +16,7 @@ function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Flatten orders from users
+  
   const flattenOrders = (users) => {
     let allOrders = [];
     users.forEach((user) => {
@@ -32,7 +32,7 @@ function AdminOrders() {
     return allOrders;
   };
 
-  // Fetch all orders
+  
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -51,7 +51,7 @@ function AdminOrders() {
     fetchOrders();
   }, []);
 
-  // Filter orders by ID, username, or email
+
   const filteredOrders = orders.filter(
     (order) =>
       order.id.toString().includes(searchTerm) ||
@@ -59,7 +59,7 @@ function AdminOrders() {
       order.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Update order status
+
   const updateOrderStatus = async (order, newStatus) => {
     try {
       const res = await axios.get(`${API_BASE}/users/${order.userId}`);
@@ -86,7 +86,7 @@ function AdminOrders() {
     }
   };
 
-  // Get status badge
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "pending":
@@ -128,7 +128,7 @@ function AdminOrders() {
     }
   };
 
-  // Stats
+  
   const totalOrders = orders.length;
   const pendingOrders = orders.filter((o) => o.status === "pending").length;
   const confirmedOrders = orders.filter((o) => o.status === "confirmed").length;
@@ -145,13 +145,13 @@ function AdminOrders() {
 
   return (
     <div className="p-6">
-      {/* Header */}
+      
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Order Management</h1>
         <p className="text-gray-600">Manage and track all customer orders</p>
       </div>
 
-      {/* Stats */}
+    
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg border border-gray-200">
           <p className="text-gray-600 text-sm">Total Orders</p>
@@ -175,7 +175,7 @@ function AdminOrders() {
         </div>
       </div>
 
-      {/* Search */}
+    
       <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
         <div className="relative max-w-md">
           <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -189,7 +189,7 @@ function AdminOrders() {
         </div>
       </div>
 
-      {/* Orders Table */}
+
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">

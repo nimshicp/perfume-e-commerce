@@ -1,10 +1,10 @@
-
-import { useContext } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useUser } from '../context/userContext';
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useUser();
+
   
   if (loading) {
     return (
@@ -13,7 +13,12 @@ const AdminRoute = ({ children }) => {
       </div>
     );
   }
-  return user?.role === 'admin' || user?.isAdmin ? children : <Navigate to="/" />;
+
+  return user?.role === 'admin' || user?.isAdmin ? (
+    children
+  ) : (
+    <Navigate to="/" replace />
+  );
 };
 
 export default AdminRoute;

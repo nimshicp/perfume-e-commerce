@@ -187,7 +187,9 @@
           "createdAt": "2025-10-15T07:19:11.223Z",
           "updatedAt": "2025-10-15T07:19:14.483Z"
         }
-      ]
+      ],
+      "isBlock": false,
+      "role": "admin"
     },
     {
       "id": "c1a4",
@@ -207,7 +209,8 @@
         }
       ],
       "wishlist": [],
-      "orders": []
+      "orders": [],
+      "role": "user"
     },
     {
       "id": "8d5e",
@@ -226,7 +229,7 @@
       "cart": [],
       "wishlist": [],
       "orders": [],
-      "isBlocked": false
+      "isBlock": false
     },
     {
       "id": "2b9a",
@@ -302,7 +305,8 @@
       "isAdmin": false,
       "cart": [],
       "wishlist": [],
-      "orders": []
+      "orders": [],
+      "isBlock": false
     },
     {
       "id": "123f",

@@ -95,7 +95,7 @@ const Navbar = () => {
             
                     navigate("/dashboard");
                   }}
-                  className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                  className="bg-gray-800 text-white px-3 py-1 rounded-lg hover:bg-white transition hover:text-gray-900 hover:border-1 hover:border-gray-900"
                 >
                   Admin
                 </button>}
@@ -107,7 +107,7 @@ const Navbar = () => {
                     logout();
                     navigate("/login");
                   }}
-                  className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                  className="bg-white border-gray-600 border-1 text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-800 transition  hover:text-white "
                 >
                   Logout
                 </button>
@@ -134,86 +134,117 @@ const Navbar = () => {
 
     
       {menuOpen && (
-        <div className="md:hidden bg-white shadow-md px-4 pb-4 space-y-3">
-          <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-gray-900">
-            HOME
-          </Link>
-          <Link to="/products" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-gray-900">
-            PRODUCTS
-          </Link>
-          <Link to="/about" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-gray-900">
-            ABOUT
-          </Link>
-          <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-gray-900">
-            CONTACT
-          </Link>
+  <div className="md:hidden bg-white shadow-md px-4 pb-4 space-y-4">
+  
+    <Link
+      to="/"
+      onClick={() => setMenuOpen(false)}
+      className="block text-gray-700 hover:text-gray-900"
+    >
+      HOME
+    </Link>
+    <Link
+      to="/products"
+      onClick={() => setMenuOpen(false)}
+      className="block text-gray-700 hover:text-gray-900"
+    >
+      PRODUCTS
+    </Link>
+    <Link
+      to="/about"
+      onClick={() => setMenuOpen(false)}
+      className="block text-gray-700 hover:text-gray-900"
+    >
+      ABOUT
+    </Link>
+    <Link
+      to="/contact"
+      onClick={() => setMenuOpen(false)}
+      className="block text-gray-700 hover:text-gray-900"
+    >
+      CONTACT
+    </Link>
 
-      
-          <div className="border-t border-gray-200 my-3"></div>
+    <div className="border-t border-gray-200 my-3"></div>
 
-        
-          <div className="flex items-center justify-around text-gray-700">
-            <Heart
-              size={22}
-              className="cursor-pointer hover:text-pink-600"
-              onClick={() => {
-                navigate("/wishlist");
-                setMenuOpen(false);
-              }}
-            />
-            <ShoppingBag
-              size={22}
-              className="cursor-pointer hover:text-blue-600"
-              onClick={() => {
-                navigate("/orders");
-                setMenuOpen(false);
-              }}
-            />
-            <ShoppingCart
-              size={22}
-              className="cursor-pointer hover:text-green-600"
-              onClick={() => {
-                navigate("/cart");
-                setMenuOpen(false);
-              }}
-            />
-            <User
-              size={22}
-              className="cursor-pointer hover:text-gray-900"
-              onClick={() => {
-                navigate("/profile");
-                setMenuOpen(false);
-              }}
-            />
-          </div>
+    
+    <div className="flex items-center justify-around text-gray-700">
+      <Heart
+        size={22}
+        className="cursor-pointer hover:text-pink-600"
+        onClick={() => {
+          navigate("/wishlist");
+          setMenuOpen(false);
+        }}
+      />
+      <ShoppingBag
+        size={22}
+        className="cursor-pointer hover:text-blue-600"
+        onClick={() => {
+          navigate("/orders");
+          setMenuOpen(false);
+        }}
+      />
+      <ShoppingCart
+        size={22}
+        className="cursor-pointer hover:text-green-600"
+        onClick={() => {
+          navigate("/cart");
+          setMenuOpen(false);
+        }}
+      />
+      <User
+        size={22}
+        className="cursor-pointer hover:text-gray-900"
+        onClick={() => {
+          navigate("/profile");
+          setMenuOpen(false);
+        }}
+      />
+    </div>
 
-          
-          <div className="pt-3 text-center">
-            {user ? (
-              <button
-                onClick={() => {
-                  logout();
-                  navigate("/login");
-                  setMenuOpen(false);
-                }}
-                className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition"
-              >
-                Logout
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  navigate("/login");
-                  setMenuOpen(false);
-                }}
-                className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition"
-              >
-                Login
-              </button>
-            )}
-          </div>
-        </div>
+    <div className="border-t border-gray-200 my-3"></div>
+
+  
+    <div className="flex flex-col items-center gap-3">
+      {isAdmin && (
+        <button
+          onClick={() => {
+            navigate("/dashboard");
+            setMenuOpen(false);
+          }}
+          className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          Admin 
+        </button>
       )}
+
+      {user ? (
+        <button
+          onClick={() => {
+            logout();
+            navigate("/login");
+            setMenuOpen(false);
+          }}
+          className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          Logout
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            navigate("/login");
+            setMenuOpen(false);
+          }}
+          className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          Login
+        </button>
+      )}
+    </div>
+  </div>
+)}
+
     </nav>
   );
 };

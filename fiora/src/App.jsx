@@ -23,6 +23,7 @@ import AdminDashboard from "./Admin/AdminDashboard";
 import AdminProducts from "./Admin/AdminProducts";
 import AdminOrders from "./Admin/AdminOrders";
 import AdminUsers from "./Admin/AdminUsers";
+import AdminRoute from "./Admin/AdminRoute";
 
 
 
@@ -64,7 +65,7 @@ function App() {
         <Route path="/orders" element={<OrderHistory/>}/>
       
         
-       <Route path="/dashboard/*" element={<AdminLayout />}>
+       <Route path="/dashboard/*" element={<AdminRoute><AdminLayout /></AdminRoute>}>
   <Route index element={<AdminDashboard />} />
   <Route path="products" element={<AdminProducts />} />
   <Route path="orders" element={<AdminOrders />} />

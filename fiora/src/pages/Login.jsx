@@ -41,37 +41,51 @@ useEffect(() => {
   }, [user, navigate]);
 
 
- const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newErrors = validateForm();
-    setErrors(newErrors);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const newErrors = validateForm();
+  setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        
-        const response = await axios.get("http://localhost:5000/users");
-        const users = response.data;
+  if (Object.keys(newErrors).length === 0) {
+    try {
+      const response = await axios.get("http://localhost:5000/users");
+      const users = response.data;
 
-        
-        const foundUser = users.find(
-          (u) =>
-            (u.Username === formData.usernameOrEmail || u.email === formData.usernameOrEmail) &&
-            u.password === formData.password
-        );
 
-        if (foundUser) {
-          toast.success("Login successful!");
-          login(foundUser); 
-          navigate("/");
-        } else {
-          toast.error("Invalid username/email or password");
+      const foundUser = users.find(
+        (u) =>
+          (u.Username === formData.usernameOrEmail ||
+            u.email === formData.usernameOrEmail) &&
+          u.password === formData.password
+      );
+
+      
+      if (foundUser) {
+    
+        if (foundUser.isBlock) {
+          toast.error("Your account has been blocked by the admin!");
+          setFormData({
+            usernameOrEmail: "",
+    password: "",
+          })
+
+          return; 
         }
-         } catch (error) {
-        console.error("Login failed:", error);
-        toast.error("Server error! Please try again later.");
+
+        
+        toast.success("Login successful!");
+        login(foundUser); 
+        navigate("/");
+      } else {
+        toast.error("Invalid username/email or password");
       }
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Server error! Please try again later.");
     }
-  };
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

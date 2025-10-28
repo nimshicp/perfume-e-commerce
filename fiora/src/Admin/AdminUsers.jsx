@@ -1,4 +1,4 @@
-// components/UserManagement.jsx
+
 import React, { useState, useEffect } from "react";
 import {
   Users,
@@ -20,7 +20,7 @@ function AdminUsers() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch users
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -38,14 +38,13 @@ function AdminUsers() {
     fetchUsers();
   }, []);
 
-  // Filter users based on search
+  
   const filteredUsers = users.filter(
     (user) =>
       user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.Username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Block/Unblock user
   const toggleBlockUser = async (user) => {
     const action = user.isBlock ? "unblock" : "block";
 
@@ -64,7 +63,7 @@ function AdminUsers() {
     }
   };
 
-  // Make user admin/remove admin
+  
   const toggleAdminStatus = async (user) => {
     const action = user.role === "admin" ? "remove admin rights from" : "make admin";
 
@@ -86,7 +85,7 @@ function AdminUsers() {
     }
   };
 
-  // Calculate user statistics
+  
   const getUserStats = (user) => {
     const totalOrders = user.orders?.length || 0;
     const totalSpent =
@@ -99,7 +98,7 @@ function AdminUsers() {
     return { totalOrders, totalSpent };
   };
 
-  // Get status badge color and text
+  
   const getStatusInfo = (user) => {
     if (user.isBlock) {
       return {
@@ -116,7 +115,6 @@ function AdminUsers() {
     };
   };
 
-  // Get admin badge
   const getAdminBadge = (user) => {
     if (user.role === "admin") {
       return {
@@ -145,13 +143,13 @@ function AdminUsers() {
 
   return (
     <div className="p-6">
-      {/* Header */}
+  
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
         <p className="text-gray-600">Manage user access and admin permissions</p>
       </div>
 
-      {/* Stats Summary */}
+      
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between">
@@ -200,7 +198,7 @@ function AdminUsers() {
         </div>
       </div>
 
-      {/* Search Bar */}
+      
       <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
         <div className="relative max-w-md">
           <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -214,7 +212,7 @@ function AdminUsers() {
         </div>
       </div>
 
-      {/* Users Table */}
+    
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -295,7 +293,7 @@ function AdminUsers() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex gap-2">
-                        {/* Block/Unblock Button */}
+                        
                         <button
                           onClick={() => toggleBlockUser(user)}
                           disabled={user.id === currentUser?.id}
@@ -323,7 +321,7 @@ function AdminUsers() {
                           )}
                         </button>
 
-                        {/* Make Admin/Remove Admin Button */}
+                      
                         <button
                           onClick={() => toggleAdminStatus(user)}
                           disabled={user.id === currentUser?.id}
@@ -359,7 +357,7 @@ function AdminUsers() {
           </table>
         </div>
 
-        {/* Empty State */}
+        
         {filteredUsers.length === 0 && (
           <div className="text-center py-12">
             <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />

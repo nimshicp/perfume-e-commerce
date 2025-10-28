@@ -43,26 +43,27 @@ function AdminDashboard() {
         let totalOrders = 0;
         let activeUsers = 0;
 
-        // Order status tracking
+        
         const orderStatusCount = {
           pending: 0,
           confirmed: 0,
+          shipped: 0,
+          delivered: 0,
           cancelled: 0
         };
 
-        // Calculate simple category distribution
+        
         const categoryCount = {};
         products.forEach(product => {
           const category = product.category || 'unisex';
           categoryCount[category] = (categoryCount[category] || 0) + 1;
         });
 
-        // Convert to array
         const categoryDistribution = Object.keys(categoryCount).map(category => ({
           name: category.charAt(0).toUpperCase() + category.slice(1),
           count: categoryCount[category],
           percentage: ((categoryCount[category] / products.length) * 100).toFixed(1)
-        })).sort((a, b) => b.count - a.count); // Sort by count descending
+        })).sort((a, b) => b.count - a.count);
 
         setCategoryData(categoryDistribution);
 
@@ -74,9 +75,10 @@ function AdminDashboard() {
                 totalRevenue += order.total;
               }
 
-              // Count order status
-              if (order.status === 'pending' || order.status === 'confirmed' || order.status === 'cancelled') {
-                orderStatusCount[order.status] = (orderStatusCount[order.status] || 0) + 1;
+            
+              const status = order.status?.toLowerCase();
+              if (status && orderStatusCount.hasOwnProperty(status)) {
+                orderStatusCount[status]++;
               }
             })
           }
@@ -85,7 +87,7 @@ function AdminDashboard() {
           }
         });
 
-        // Generate monthly revenue from orders
+      
         const monthlyRevenueMap = {};
         users.forEach(user => {
           if (user.orders) {
@@ -98,14 +100,13 @@ function AdminDashboard() {
           }
         });
 
-        // Fill missing months
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const monthlyRevenue = months.map(month => ({
           month,
           revenue: monthlyRevenueMap[month] || 0
         }));
 
-        // Order status data
+        
         const orderStatus = Object.entries(orderStatusCount)
           .map(([status, count]) => ({
             name: status.charAt(0).toUpperCase() + status.slice(1),
@@ -148,17 +149,22 @@ function AdminDashboard() {
     )
   }
 
-  // Colors
+  
   const COLORS = {
     primary: '#3B82F6',
     success: '#10B981',
     warning: '#F59E0B',
-    error: '#EF4444'
+    error: '#EF4444',
+    info: '#06B6D4',
+    purple: '#8B5CF6'
   };
 
+  
   const ORDER_COLORS = {
     pending: COLORS.warning,
     confirmed: COLORS.success,
+    shipped: COLORS.info,
+    delivered: COLORS.purple,
     cancelled: COLORS.error
   };
 
@@ -185,13 +191,12 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
         <p className="text-gray-600">Welcome back! Here's your store performance.</p>
       </div>
 
-      {/* Stats Grid */}
+      
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <div className="flex items-center justify-between">
@@ -242,9 +247,9 @@ function AdminDashboard() {
         </div>
       </div>
 
-      {/* Charts Section */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Revenue Line Chart */}
+      
         <div className="bg-white p-6 rounded-xl border border-gray-200 lg:col-span-2">
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp className="w-5 h-5 text-blue-600" />
@@ -254,15 +259,8 @@ function AdminDashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData.monthlyRevenue}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-                <XAxis 
-                  dataKey="month" 
-                  stroke="#6b7280"
-                  fontSize={12}
-                />
-                <YAxis 
-                  stroke="#6b7280"
-                  fontSize={12}
-                />
+                <XAxis dataKey="month" stroke="#6b7280" fontSize={12}/>
+                <YAxis stroke="#6b7280" fontSize={12}/>
                 <Tooltip content={<CustomTooltip />} />
                 <Line 
                   type="monotone"
@@ -277,7 +275,7 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* Order Status */}
+      
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <div className="flex items-center gap-2 mb-6">
             <ShoppingBag className="w-5 h-5 text-green-600" />
@@ -306,7 +304,7 @@ function AdminDashboard() {
               </RePieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex justify-center gap-4 mt-4">
+          <div className="flex flex-wrap justify-center gap-4 mt-4">
             {chartData.orderStatus.map((status) => (
               <div key={status.name} className="flex items-center gap-2 text-sm">
                 <div 
@@ -321,7 +319,7 @@ function AdminDashboard() {
         </div>
       </div>
 
-      {/* Simple Category Distribution */}
+      
       <div className="bg-white p-6 rounded-xl border border-gray-200">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Product Categories</h3>
         
@@ -341,7 +339,7 @@ function AdminDashboard() {
               </div>
             </div>
           ))}
-          
+
           {categoryData.length === 0 && (
             <div className="text-center py-8 text-gray-500">
               <Package className="w-12 h-12 mx-auto mb-3 text-gray-300" />
@@ -349,20 +347,6 @@ function AdminDashboard() {
             </div>
           )}
         </div>
-
-        {/* Summary */}
-        {categoryData.length > 0 && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Total Categories</span>
-              <span className="font-semibold text-gray-900">{categoryData.length}</span>
-            </div>
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-gray-600">Total Products</span>
-              <span className="font-semibold text-gray-900">{stats.totalProducts}</span>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
