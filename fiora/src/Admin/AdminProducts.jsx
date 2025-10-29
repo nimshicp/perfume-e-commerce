@@ -42,7 +42,9 @@ function AdminProducts() {
       setLoading(true);
       const response = await fetch(`${API_BASE}/products`);
       const data = await response.json();
-      setProducts(data);
+       const sorted = data.sort((a, b) => b.id - a.id);
+    setProducts(sorted);
+  
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -179,19 +181,43 @@ function AdminProducts() {
     }
   };
 
-  const handleDeleteProduct = async (productId) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      try {
-        await fetch(`${API_BASE}/products/${productId}`, {
-          method: "DELETE",
-        });
-        fetchProducts();
-      } catch (error) {
-        console.error("Error deleting product:", error);
-        alert("Error deleting product. Please try again.");
-      }
-    }
-  };
+ const handleDeleteProduct = async (productId, productName) => {
+  toast((t) => (
+    <div className="flex flex-col gap-3">
+      <p className="text-gray-800 font-medium">
+        Are you sure you want to delete <b>{productName}</b>?
+      </p>
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={() => toast.dismiss(t.id)}
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={async () => {
+            try {
+              await fetch(`${API_BASE}/products/${productId}`, {
+                method: "DELETE",
+              });
+              toast.dismiss(t.id);
+              toast.success(`${productName} deleted successfully`);
+              fetchProducts(); 
+            } catch (error) {
+              toast.dismiss(t.id);
+              toast.error("Error deleting product");
+              console.error(error);
+            }
+          }}
+          className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700 text-sm"
+        >
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  ));
+};
+
 
   if (loading) {
     return (
@@ -286,6 +312,7 @@ function AdminProducts() {
             className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
           >
             <div className="h-48 bg-gray-100 flex items-center justify-center">
+              <Heart size={24}/>
               {product.image ? (
                 <img
                   src={product.image}
@@ -339,7 +366,7 @@ function AdminProducts() {
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDeleteProduct(product.id)}
+                  onClick={() => handleDeleteProduct(product.id, product.name)}
                   className="flex-1 flex items-center justify-center gap-1 bg-red-50 text-red-600 py-2 rounded-md hover:bg-red-100 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />

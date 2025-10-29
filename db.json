@@ -24,7 +24,7 @@
             }
           ],
           "total": 89.99,
-          "status": "confirmed",
+          "status": "shipped",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "UPI",
           "paymentStatus": "paid",
@@ -80,7 +80,7 @@
             }
           ],
           "total": 79.99,
-          "status": "confirmed",
+          "status": "shipped",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "cash on delivery",
           "paymentStatus": "pending",
@@ -118,7 +118,7 @@
             }
           ],
           "total": 255.96999999999997,
-          "status": "confirmed",
+          "status": "delivered",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "cash on delivery",
           "paymentStatus": "pending",
@@ -210,7 +210,8 @@
       ],
       "wishlist": [],
       "orders": [],
-      "role": "user"
+      "role": "user",
+      "isBlock": true
     },
     {
       "id": "8d5e",
@@ -313,7 +314,7 @@
       "Username": "zayan",
       "email": "admin@gmail.com",
       "password": "12345678",
-      "role": "admin",
+      "role": "user",
       "isActive": true,
       "isBlock": false,
       "cart": [],

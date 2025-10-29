@@ -23,17 +23,17 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Close mobile sidebar when route changes
+  
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
-  // Check if user is admin based on your context
+
   const isAdmin = user?.role === 'admin';
 
-  // Navigation items - only show if user is admin
+  
   const navItems = isAdmin ? [
     {
       path: "/dashboard",
@@ -57,7 +57,7 @@ export default function Sidebar() {
     },
   ] : [];
 
-  // Get user info
+  
   const getUserInitials = () => {
     if (!user || !user.Username) return 'U';
     return user.Username.charAt(0).toUpperCase();
@@ -78,14 +78,14 @@ export default function Sidebar() {
     return user.role === 'admin' ? 'Administrator' : 'Customer';
   };
 
-  // If user is not admin, don't show admin sidebar
+  
   if (!isAdmin) {
     return null;
   }
 
   return (
     <>
-      {/* Mobile Toggle Button */}
+      
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-700 text-white rounded-lg shadow-lg hover:bg-gray-800 transition-all duration-300"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -93,7 +93,7 @@ export default function Sidebar() {
         {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Mobile Overlay */}
+    
       {isMobileOpen && (
         <div 
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
@@ -101,7 +101,7 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
+  
       <div className={`
         bg-white
         border-r border-gray-200
@@ -114,7 +114,7 @@ export default function Sidebar() {
         shadow-xl
       `}>
         
-        {/* Header Section */}
+        
         <div className="p-4 border-b border-gray-200 bg-gray-50">
           <div className={`flex items-center ${isOpen ? 'justify-between' : 'justify-center'}`}>
             {isOpen && (
@@ -129,7 +129,7 @@ export default function Sidebar() {
               </div>
             )}
             
-            {/* Desktop Toggle Button */}
+            
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="hidden lg:flex p-2 text-gray-500 hover:bg-gray-200 rounded-lg transition-colors"
@@ -139,7 +139,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Navigation - Only show if user is admin */}
+        
         {isAdmin && (
           <nav className="flex-1 p-4 space-y-2">
             {navItems.map((item) => (
@@ -167,7 +167,7 @@ export default function Sidebar() {
                   </span>
                 )}
 
-                {/* Tooltip for collapsed state */}
+              
                 {!isOpen && (
                   <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
                     {item.label}
@@ -178,9 +178,9 @@ export default function Sidebar() {
           </nav>
         )}
 
-        {/* Bottom Section */}
+        
         <div className="p-4 border-t border-gray-200 bg-gray-50 space-y-3">
-          {/* Back to Store */}
+        
           <Link
             to="/"
             className={`
@@ -195,7 +195,7 @@ export default function Sidebar() {
             {isOpen && <span className="font-medium text-sm">Back to Store</span>}
           </Link>
 
-          {/* Logout */}
+          
           <button
             onClick={() => {
               logout();
@@ -212,7 +212,7 @@ export default function Sidebar() {
             {isOpen && <span className="font-medium text-sm">Logout</span>}
           </button>
 
-          {/* User Info */}
+          
           <div className={`
             flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-300 shadow-sm
             ${!isOpen ? 'justify-center' : ''}
@@ -249,7 +249,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Main Content Margin */}
+
       <div className={`
         transition-all duration-300 ease-in-out
         ${isOpen ? 'lg:ml-64' : 'lg:ml-20'}

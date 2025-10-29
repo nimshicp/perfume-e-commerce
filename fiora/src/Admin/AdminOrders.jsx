@@ -80,6 +80,8 @@ function AdminOrders() {
       );
 
       toast.success(`Order status updated to ${newStatus}!`);
+      fetchOrders(); 
+
     } catch (err) {
       console.error(err);
       toast.error("Failed to update order status");
