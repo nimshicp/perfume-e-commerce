@@ -6,7 +6,17 @@
       "email": "nimshicp2003@gmail.com",
       "password": "12345678",
       "cart": [],
-      "wishlist": [],
+      "wishlist": [
+        {
+          "id": "3",
+          "name": "Universal Harmony",
+          "price": 95.99,
+          "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+          "category": "unisex",
+          "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+          "stock": 8
+        }
+      ],
       "orders": [
         {
           "id": 1760340511398,
@@ -24,7 +34,7 @@
             }
           ],
           "total": 89.99,
-          "status": "shipped",
+          "status": "delivered",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "UPI",
           "paymentStatus": "paid",
@@ -52,7 +62,7 @@
             }
           ],
           "total": 79.99,
-          "status": "confirmed",
+          "status": "shipped",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "cash on delivery",
           "paymentStatus": "pending",
@@ -80,7 +90,7 @@
             }
           ],
           "total": 79.99,
-          "status": "shipped",
+          "status": "delivered",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "cash on delivery",
           "paymentStatus": "pending",
@@ -186,6 +196,34 @@
           },
           "createdAt": "2025-10-15T07:19:11.223Z",
           "updatedAt": "2025-10-15T07:19:14.483Z"
+        },
+        {
+          "id": 1761747967154,
+          "userId": "fdce",
+          "items": [
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 8,
+              "quantity": 1
+            }
+          ],
+          "total": 95.99,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "cash on delivery",
+          "paymentStatus": "pending",
+          "customerInfo": {
+            "name": "Nimshi cp",
+            "email": "nimshicp2003@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-10-29T14:26:07.154Z",
+          "updatedAt": "2025-10-29T14:26:14.926Z"
         }
       ],
       "isBlock": false,
@@ -220,7 +258,8 @@
       "password": "00000000",
       "cart": [],
       "wishlist": [],
-      "orders": []
+      "orders": [],
+      "isBlock": false
     },
     {
       "id": "8b81",
@@ -256,7 +295,7 @@
             }
           ],
           "total": 95.99,
-          "status": "confirmed",
+          "status": "cancelled",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "cash on delivery",
           "paymentStatus": "pending",
@@ -284,7 +323,7 @@
             }
           ],
           "total": 95.99,
-          "status": "shipped",
+          "status": "delivered",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "",
           "paymentStatus": "pending",
@@ -296,7 +335,8 @@
           "createdAt": "2025-10-23T09:26:08.576Z",
           "updatedAt": "2025-10-23T09:26:08.577Z"
         }
-      ]
+      ],
+      "role": "admin"
     },
     {
       "id": "78c1",
@@ -364,17 +404,57 @@
             }
           ],
           "total": 75.99,
-          "status": "confirmed",
+          "status": "cancelled",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "",
-          "paymentStatus": "pending",
+          "paymentStatus": "cancelled",
           "customerInfo": {
             "name": "Nimshi cp",
             "email": "admin@gmail.com",
             "phone": "09544441112"
           },
           "createdAt": "2025-10-23T06:04:22.233Z",
-          "updatedAt": "2025-10-23T06:04:22.234Z"
+          "updatedAt": "2025-11-03T04:08:30.846Z",
+          "cancelledAt": "2025-11-03T04:08:30.846Z"
+        },
+        {
+          "id": 1762142882285,
+          "userId": "123f",
+          "items": [
+            {
+              "id": "10",
+              "name": "Amber Nights",
+              "price": 85.99,
+              "image": "https://images.unsplash.com/photo-1599342166997-58552e91d9f5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
+              "category": "men",
+              "description": "Warm amber and sandalwood fragrance with hints of spice. Perfect for evening wear and intimate occasions.",
+              "stock": 10,
+              "quantity": 2
+            },
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 7,
+              "quantity": 1
+            }
+          ],
+          "total": 267.96999999999997,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "UPI",
+          "paymentStatus": "paid",
+          "customerInfo": {
+            "name": "zayan",
+            "email": "admin@gmail.com",
+            "phone": "9544441112"
+          },
+          "createdAt": "2025-11-03T04:08:02.285Z",
+          "updatedAt": "2025-11-03T04:08:14.153Z",
+          "paidAt": "2025-11-03T04:08:14.153Z"
         }
       ]
     }
@@ -396,7 +476,7 @@
       "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
       "category": "unisex",
       "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
-      "stock": 8
+      "stock": 6
     },
     {
       "id": "4",
@@ -459,7 +539,7 @@
       "image": "https://images.unsplash.com/photo-1599342166997-58552e91d9f5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
       "category": "men",
       "description": "Warm amber and sandalwood fragrance with hints of spice. Perfect for evening wear and intimate occasions.",
-      "stock": 10
+      "stock": 8
     },
     {
       "id": "11",

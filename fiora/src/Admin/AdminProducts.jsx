@@ -312,7 +312,7 @@ function AdminProducts() {
             className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
           >
             <div className="h-48 bg-gray-100 flex items-center justify-center">
-              <Heart size={24}/>
+              
               {product.image ? (
                 <img
                   src={product.image}
