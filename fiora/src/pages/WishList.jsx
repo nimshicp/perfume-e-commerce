@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { useShop } from "../context/ShopContext";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { useWishlist } from "../context/WishlistContext";
 import toast from "react-hot-toast";
 

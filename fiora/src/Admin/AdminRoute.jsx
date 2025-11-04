@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUser } from '../context/userContext';
+import { useUser } from '../context/UserContext';
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useUser();

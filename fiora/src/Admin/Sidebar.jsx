@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import {
   LayoutDashboard,
   Package,

@@ -1,17 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
-import { useUser } from "./userContext";
+import { useUser } from "./UserContext";
 import axios from "axios";
 import { useShop } from "./ShopContext";
 
 const OrderContext = createContext();
-
 export const OrderProvider = ({ children }) => {
   const { user, setUser } = useUser();
   const [error, setError] = useState("");
   const { cart, cartTotal, clearCart } = useShop();
-
-
-  
   const UpdateDb = async (update) => {
     if (!user) {
       return null;
@@ -31,11 +27,6 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
-
-
-
-
-
 const reduceStock = async (items) => {
   for (let item of items) {
     const productResponse = await axios.get(`http://localhost:5000/products/${item.id}`);
@@ -53,12 +44,6 @@ const restoreStock = async (items) => {
     await axios.patch(`http://localhost:5000/products/${item.id}`, { stock: restoredStock });
   }
 };
-
-
-
-
-
-
 
   const createOrder = async (orderData) => {
     if (!user) {
@@ -197,9 +182,6 @@ const cancelOrder = async (orderId) => {
     const orders = user.orders || [];
     return orders.find((order) => order.id === orderId) || null;
   };
-
-
-
   const orders = user?.orders || [];
 
   return (

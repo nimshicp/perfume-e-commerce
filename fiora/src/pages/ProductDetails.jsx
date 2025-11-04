@@ -10,7 +10,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useShop } from "../context/ShopContext";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import toast from "react-hot-toast";
 import { useWishlist } from "../context/WishlistContext";
 

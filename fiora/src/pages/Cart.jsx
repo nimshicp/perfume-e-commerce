@@ -1,7 +1,7 @@
 import React from "react";
 import { useShop } from "../context/ShopContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import {
   Trash2,
   Plus,

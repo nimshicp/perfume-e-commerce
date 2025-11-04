@@ -1,6 +1,6 @@
 import React from "react";
 import { User, Mail, Phone, MapPin, ShoppingBag, Heart, LogOut } from "lucide-react";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useOrder } from "../context/OrderContext";
 import { useWishlist } from "../context/WishlistContext";

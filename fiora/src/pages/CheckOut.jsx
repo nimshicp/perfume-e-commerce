@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useOrder } from "../context/OrderContext";
 import { useShop } from "../context/ShopContext";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 

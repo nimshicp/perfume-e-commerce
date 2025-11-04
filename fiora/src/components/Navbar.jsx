@@ -8,7 +8,7 @@ import {
   ShoppingBag,
   User,
 } from "lucide-react";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { useShop } from "../context/ShopContext";
 import { useWishlist } from "../context/WishlistContext";
 

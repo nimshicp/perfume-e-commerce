@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useUser } from "./userContext";
+import { useUser } from "./UserContext";
 import axios from "axios";
 
 const WishlistContext = createContext();

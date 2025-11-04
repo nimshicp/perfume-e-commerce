@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useUser } from "./userContext";
+import { useUser } from "./UserContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 
