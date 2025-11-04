@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = "http://localhost:5000";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
