@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "./userContext";
 import axios from "axios";
-import toast from "react-hot-toast";
-import { useLocation } from "react-router-dom";
 
 const WishlistContext = createContext();
 
