@@ -90,23 +90,29 @@ const navigate = useNavigate();
             </div>
 
             <div className="flex space-x-2">
-              <button
-                className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"
-                onClick={() => {addToCart(product);
-toast.success("item Added to cart")
-                }}
-              >
-                <ShoppingCart size={20} />
-                Add to Cart
-              </button>
-              <button
-                onClick={() =>{ removeFromWishList(product.id);
-                  toast.success("item removed from the wishlist")
-                }}
-                className="text-red-500 p-2"
-              >
-                <Trash2 size={18} />
-              </button>
+             <button
+  className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"
+  onClick={async () => {
+    
+    await addToCart(product);
+    await removeFromWishList(product.id);
+    toast.success(`${product.name} added to cart `);
+  }}
+>
+  <ShoppingCart size={20} />
+  Add to Cart
+</button>
+
+<button
+  onClick={async () => {
+    await removeFromWishList(product.id);
+    toast.success("item removed from the wishlist");
+  }}
+  className="text-red-500 p-2"
+>
+  <Trash2 size={18} />
+</button>
+
             </div>
           </div>
         ))}

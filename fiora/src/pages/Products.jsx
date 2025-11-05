@@ -3,6 +3,7 @@ import { Search, Menu, ChevronDown } from "lucide-react";
 import axios from "axios";
 import ProductCard from "../components/productCard";
 import { useLocation } from "react-router-dom";
+import SkeletonProductCard from "../components/Skelton";
 
 function Products() {
   const location = useLocation();
@@ -107,16 +108,17 @@ useEffect(() => {
     return;
   };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
-          <span className="ml-3 text-gray-600">Loading products...</span>
-        </div>
-      </div>
-    );
-  }
+  
+
+if (loading) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <SkeletonProductCard key={index} />
+      ))}
+    </div>
+  );
+}
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;

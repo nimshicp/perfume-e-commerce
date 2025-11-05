@@ -224,6 +224,34 @@
           },
           "createdAt": "2025-10-29T14:26:07.154Z",
           "updatedAt": "2025-10-29T14:26:14.926Z"
+        },
+        {
+          "id": 1762271961883,
+          "userId": "fdce",
+          "items": [
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 6,
+              "quantity": 1
+            }
+          ],
+          "total": 95.99,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "cash on delivery",
+          "paymentStatus": "pending",
+          "customerInfo": {
+            "name": "Nimshi cp",
+            "email": "nimshicp2003@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-11-04T15:59:21.883Z",
+          "updatedAt": "2025-11-04T15:59:27.262Z"
         }
       ],
       "isBlock": false,
@@ -443,18 +471,68 @@
             }
           ],
           "total": 267.96999999999997,
-          "status": "confirmed",
+          "status": "cancelled",
           "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
           "paymentMethod": "UPI",
-          "paymentStatus": "paid",
+          "paymentStatus": "refunded",
           "customerInfo": {
             "name": "zayan",
             "email": "admin@gmail.com",
             "phone": "9544441112"
           },
           "createdAt": "2025-11-03T04:08:02.285Z",
-          "updatedAt": "2025-11-03T04:08:14.153Z",
-          "paidAt": "2025-11-03T04:08:14.153Z"
+          "updatedAt": "2025-11-05T09:14:53.449Z",
+          "paidAt": "2025-11-03T04:08:14.153Z",
+          "cancelledAt": "2025-11-05T09:14:53.449Z"
+        },
+        {
+          "id": 1762334065951,
+          "userId": "123f",
+          "items": [
+            {
+              "id": "11",
+              "name": "Lemon Verbena",
+              "price": 65.99,
+              "image": "https://wallpaperbat.com/img/856553-perfume-photo-download-free-perfume-stock-photo-hd-image.jpg",
+              "category": "unisex",
+              "description": "Fresh and zesty citrus fragrance with lemon, lime, and herbal notes. Energizing and vibrant for daily use.",
+              "stock": 10,
+              "quantity": 1
+            },
+            {
+              "id": "3",
+              "name": "Universal Harmony",
+              "price": 95.99,
+              "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
+              "category": "unisex",
+              "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
+              "stock": 5,
+              "quantity": 1
+            },
+            {
+              "id": "4",
+              "name": "Vanilla Dream",
+              "price": 75.99,
+              "image": "https://images.pexels.com/photos/28843743/pexels-photo-28843743.jpeg",
+              "category": "women",
+              "description": "Sweet and comforting fragrance with Madagascar vanilla, tonka bean, and soft floral undertones. Like a warm embrace in a bottle.",
+              "stock": 10,
+              "quantity": 1
+            }
+          ],
+          "total": 237.96999999999997,
+          "status": "confirmed",
+          "shippingAddress": "Chakkapath house Mannarmala (po) pallipadi,Perinthalmanna,679325",
+          "paymentMethod": "UPI",
+          "paymentStatus": "paid",
+          "customerInfo": {
+            "name": "zayan",
+            "email": "zayan@gmail.com",
+            "phone": "09544441112"
+          },
+          "createdAt": "2025-11-05T09:14:25.951Z",
+          "updatedAt": "2025-11-05T09:14:39.063Z",
+          "paidAt": "2025-11-05T09:14:39.063Z"
         }
       ]
     }
@@ -476,7 +554,7 @@
       "image": "https://images.pexels.com/photos/16034366/pexels-photo-16034366.jpeg",
       "category": "unisex",
       "description": "A balanced blend of citrus top notes with warm base notes of amber and musk. Designed to complement any personality and occasion.",
-      "stock": 6
+      "stock": 5
     },
     {
       "id": "4",
@@ -485,7 +563,7 @@
       "image": "https://images.pexels.com/photos/28843743/pexels-photo-28843743.jpeg",
       "category": "women",
       "description": "Sweet and comforting fragrance with Madagascar vanilla, tonka bean, and soft floral undertones. Like a warm embrace in a bottle.",
-      "stock": 10
+      "stock": 9
     },
     {
       "id": "5",
@@ -548,7 +626,7 @@
       "image": "https://wallpaperbat.com/img/856553-perfume-photo-download-free-perfume-stock-photo-hd-image.jpg",
       "category": "unisex",
       "description": "Fresh and zesty citrus fragrance with lemon, lime, and herbal notes. Energizing and vibrant for daily use.",
-      "stock": 10
+      "stock": 9
     },
     {
       "id": "12",
