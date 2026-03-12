@@ -1,88 +1,90 @@
-import axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
-import { createContext } from 'react'
-import toast from 'react-hot-toast'
+import React, { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { registerUser, loginUser } from "../api/authApi";
 
+const UserContext = createContext();
 
+export function UserProvider({ children }) {
 
-const UserContext = createContext()
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState("");
 
- export function UserProvider({children}) {
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
 
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const login = async (data) => {
+  try {
+
+    const res = await loginUser(data);
+
+    const token = res.data.access;
+
+    localStorage.setItem("access_token", token);
 
     
-const[user,setUser] = useState(null)
-const [error,setError] = useState("")
- 
+    const userData = {
+      username: res.data.username
+    };
 
-useEffect(() => {
-    const storedUser =localStorage.getItem("currentUser");
-    if(storedUser){
-        setUser(JSON.parse(storedUser))
-    }
-},[])
-
-
-const login = (userData) => {
     setUser(userData);
-    localStorage.setItem("currentUser",JSON.stringify(userData))
-}
 
+    localStorage.setItem("currentUser", JSON.stringify(userData));
 
+    toast.success("Login successful");
 
+    return userData;
 
-const register = async (userData) => {
-    setError('')
+  } catch (err) {
 
-try{
-    const res = await axios.get(`http://localhost:5000/users?email=${userData.email}`);
-      if (res.data.length > 0) {
-        setError("Account already exists");
-        toast.error("Account already exists!");
-        return null;
+    toast.error("Invalid credentials");
+
+    return null;
+
+  }
+};
+
+  const register = async (userData) => {
+
+    try {
+
+      const res = await registerUser(userData);
+
+      toast.success("Account created successfully");
+
+      return res.data;
+
+    } catch (err) {
+
+      setError("Registration failed");
+
+      toast.error("Registration failed");
+
+      return null;
+
     }
 
+  };
 
-const newUser ={
-    ...userData,
-    role: userData.email.includes('admin') ? 'admin' : 'user', 
-    isActive: true,
-    isBlock: false, 
-    cart:[],
-    wishlist:[],
-    orders:[]
-}
+  const logout = () => {
 
-const response = await axios.post('http://localhost:5000/users',newUser)
-setUser(response.data)
-localStorage.setItem("currentUser",JSON.stringify(response.data))
-setError('')
-return response.data
-
-}catch(error){
-    setError("registration failed.please try again")
-    return null
-
-}
-
-}
-
-
-
-const logout =() => {
     setUser(null);
-    localStorage.removeItem("currentUser")
-}
 
+    localStorage.removeItem("currentUser");
 
+    localStorage.removeItem("access_token");
+
+  };
 
   return (
-
-        <UserContext.Provider value={{user,setUser,login,logout,register,error}}>
-            {children}
-        </UserContext.Provider>
-
-  )
+    <UserContext.Provider value={{ user, login, logout, register, error }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
-export const useUser =() => useContext(UserContext)
+export const useUser = () => useContext(UserContext);

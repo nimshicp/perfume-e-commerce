@@ -1,92 +1,78 @@
 import React, { useEffect, useState } from "react";
 import { Search, Menu, ChevronDown } from "lucide-react";
-import axios from "axios";
-import ProductCard from "../components/productCard";
 import { useLocation } from "react-router-dom";
+import ProductCard from "../components/productCard";
 import SkeletonProductCard from "../components/Skelton";
+import { getProducts ,getProductsByCategory} from "../api/productApi";
 
 function Products() {
   const location = useLocation();
   const categoryProp = location.state?.category;
 
   const [search, setSearch] = useState("");
-  const [product, setProduct] = useState([]);
+  const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [noResult, setNoResult] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [filterType, setFilterType] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
   const productsPerPage = 8;
 
-
- 
-
-useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-}, [currentPage]);
-
-
   useEffect(() => {
-    const FetchProducts = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get("http://localhost:5000/products");
-        setProduct(res.data);
+    fetchProducts();
+  }, [currentPage, categoryProp]);
 
-        if (categoryProp) {
-          setFilteredProducts(
-            res.data.filter((p) => p.category === categoryProp)
-          );
-        } else {
-          setFilteredProducts(res.data);
-        }
+  const fetchProducts = async () => {
+  try {
 
-        setLoading(false);
-      } catch {
-        console.log("error");
-      } finally {
-        setLoading(false);
-      }
-    };
-    FetchProducts();
-  }, [categoryProp]);
+    setLoading(true);
+
+    let res;
+
+    if (categoryProp) {
+      res = await getProductsByCategory(categoryProp, currentPage);
+    } else {
+      res = await getProducts(currentPage);
+    }
+
+    const data = res.data.results || res.data;
+
+    setProducts(data);
+    setFilteredProducts(data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    setLoading(false);
+
+  }
+};
 
   const handleSearch = () => {
-    let temp = [...product];
-
-    // if (categoryProp) {
-    //   temp = temp.filter((p) => p.category === categoryProp);
-    // }
-
     if (search.trim() === "") {
-      setFilteredProducts(temp);
+      setFilteredProducts(products);
       setNoResult(false);
       return;
     }
 
-    const searched = temp.filter((p) =>
+    const result = products.filter((p) =>
       p.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    if (searched.length === 0) {
+    if (result.length === 0) {
       setFilteredProducts([]);
       setNoResult(true);
     } else {
-      setFilteredProducts(searched);
+      setFilteredProducts(result);
       setNoResult(false);
     }
-
-    setCurrentPage(1);
   };
 
   const handleFilter = (type) => {
-    setFilterType(type);
-    setShowFilter(false);
-
     const sorted = [...filteredProducts].sort((a, b) => {
       if (type === "lowToHigh") return a.price - b.price;
       if (type === "highToLow") return b.price - a.price;
@@ -94,187 +80,73 @@ useEffect(() => {
     });
 
     setFilteredProducts(sorted);
-    setCurrentPage(1);
+    setShowFilter(false);
   };
 
-  const handleCategory = (category) => {
-    let temp = [...product];
-
-    if (category) {
-      temp = temp.filter((p) => p.category === category);
-    }
-    setFilteredProducts(temp);
-    setCurrentPage(1);
-    return;
-  };
-
-  
-
-if (loading) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-      {Array.from({ length: 8 }).map((_, index) => (
-        <SkeletonProductCard key={index} />
-      ))}
-    </div>
-  );
-}
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  if (loading) {
+    return (
+      <div className="grid grid-cols-4 gap-6 p-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <SkeletonProductCard key={i} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className="w-full bg-white border-b border-gray-200 relative">
-        <div className="flex items-center gap-4 px-4 py-3">
-          <div className="relative">
+      {/* SEARCH + FILTER */}
+      <div className="w-full bg-white border-b px-4 py-3 flex gap-4">
+
+        <button
+          onClick={() => setShowFilter(!showFilter)}
+          className="flex items-center gap-2 border px-3 py-2 rounded"
+        >
+          <Menu size={18} />
+          Filter
+          <ChevronDown size={16} />
+        </button>
+
+        {showFilter && (
+          <div className="absolute bg-white shadow border mt-12 p-2">
             <button
-              onClick={() => setShowFilter((prev) => !prev)}
-              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-500 border border-gray-300
-
-              rounded focus:outline-none focus:border-gray-400 bg-white text-sm"
+              onClick={() => handleFilter("lowToHigh")}
+              className="block px-4 py-2 hover:bg-gray-100"
             >
-              <Menu size={18} />
-              <span className="text-sm font-medium">Filter</span>
-              <ChevronDown size={16} />
+              Price Low → High
             </button>
-
-            {showFilter && (
-              <div className="absolute mt-2 bg-white shadow-lg rounded-md border w-48 z-10">
-                <button
-                  onClick={() => handleFilter("lowToHigh")}
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                >
-                  Price: Low to High
-                </button>
-                <button
-                  onClick={() => handleFilter("highToLow")}
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                >
-                  Price: High to Low
-                </button>
-              </div>
-            )}
+            <button
+              onClick={() => handleFilter("highToLow")}
+              className="block px-4 py-2 hover:bg-gray-100"
+            >
+              Price High → Low
+            </button>
           </div>
+        )}
 
-          <div className="flex-1 relative max-w-5xl">
-            <input
-              type="text"
-              placeholder="Search "
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-              className="w-full pl-4 pr-16 py-2 border border-gray-300
-
-              rounded focus:outline-none focus:border-gray-400 bg-white text-sm"
-            />
-          </div>
-
-          <button
-            className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded"
-            onClick={handleSearch}
-          >
-            <Search size={20} />
-          </button>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-3 my-6">
-        <button
-          onClick={() => {
-            setFilteredProducts(product);
-            return;
-          }}
-          className="px-5 py-2 rounded-full bg-gray-800 border border-gray-300 text-white 
-               hover:bg-gray-600 hover:text-white transition-all duration-300 
-               shadow-sm hover:shadow-md"
-        >
-          All
-        </button>
+        <input
+          className="flex-1 border px-4 py-2 rounded"
+          placeholder="Search products"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
         <button
-          onClick={() => handleCategory("men")}
-          className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
-               hover:bg-gray-800 hover:text-white transition-all duration-300 
-               shadow-sm hover:shadow-md"
+          onClick={handleSearch}
+          className="bg-gray-900 text-white px-4 rounded"
         >
-          Men
-        </button>
-
-        <button
-          onClick={() => handleCategory("women")}
-          className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
-               hover:bg-gray-800 hover:text-white transition-all duration-300 
-               shadow-sm hover:shadow-md"
-        >
-          Women
-        </button>
-
-        <button
-          onClick={() => handleCategory("unisex")}
-          className="px-5 py-2 rounded-full border border-gray-300 text-gray-700 
-               hover:bg-gray-800 hover:text-white transition-all duration-300 
-               shadow-sm hover:shadow-md"
-        >
-          Unisex
+          <Search size={20} />
         </button>
       </div>
 
-      <div className="p-4">
+      {/* PRODUCTS GRID */}
+      <div className="grid grid-cols-4 gap-6 p-6">
         {noResult ? (
-          <h2 className="text-center text-gray-500 text-lg">
-            No products found
-          </h2>
+          <p>No products found</p>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-              {currentProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center mt-8 space-x-2">
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
-                >
-                  Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentPage(index + 1)}
-                    className={`px-3 py-2 rounded ${
-                      currentPage === index + 1
-                        ? "bg-gray-800 text-white"
-                        : "bg-gray-200 hover:bg-gray-300"
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
-                >
-                  Next
-                </button>
-              </div>
-            )}
-          </>
+          filteredProducts.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))
         )}
       </div>
     </>

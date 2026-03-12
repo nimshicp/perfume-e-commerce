@@ -42,48 +42,25 @@ useEffect(() => {
 
 
 const handleSubmit = async (e) => {
+
   e.preventDefault();
+
   const newErrors = validateForm();
   setErrors(newErrors);
 
   if (Object.keys(newErrors).length === 0) {
-    try {
-      const response = await axios.get("http://localhost:5000/users");
-      const users = response.data;
 
+    const result = await login({
+      email: formData.usernameOrEmail,
+      password: formData.password
+    });
 
-      const foundUser = users.find(
-        (u) =>
-          (u.Username === formData.usernameOrEmail ||
-            u.email === formData.usernameOrEmail) &&
-          u.password === formData.password
-      );
-
-      
-      if (foundUser) {
-    
-        if (foundUser.isBlock) {
-          toast.error("Your account has been blocked by the admin!");
-          setFormData({
-            usernameOrEmail: "",
-    password: "",
-          })
-
-          return; 
-        }
-
-        
-        toast.success("Login successful!");
-        login(foundUser); 
-        navigate("/");
-      } else {
-        toast.error("Invalid username/email or password");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Server error! Please try again later.");
+    if (result) {
+      navigate("/");
     }
+
   }
+
 };
 
 

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Heart,
   ShoppingCart,
@@ -9,215 +9,251 @@ import {
   Shield,
   RotateCcw,
 } from "lucide-react";
+
 import { useShop } from "../context/ShopContext";
 import { useUser } from "../context/UserContext";
-import toast from "react-hot-toast";
 import { useWishlist } from "../context/WishlistContext";
 
+import toast from "react-hot-toast";
+import { getProductDetails } from "../api/productApi";
+
 function ProductDetails() {
+
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const location = useLocation();
-  const product = location.state?.product;
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const { addToCart, updateCartQuantity, cart } = useShop();
   const { user } = useUser();
+  const { addToWishList, removeFromWishList, isWishList } = useWishlist();
+
+  useEffect(() => {
+    fetchProduct();
+  }, [id]);
+
+  const fetchProduct = async () => {
+    try {
+
+      const res = await getProductDetails(id);
+
+      setProduct(res.data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  };
+
+  if (loading) {
+    return <p className="text-center mt-10">Loading...</p>;
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <h2 className="text-xl font-bold">Product not found</h2>
+      </div>
+    );
+  }
 
   const cartItem = cart.find((item) => item.id === product.id);
   const quantity = cartItem ? cartItem.quantity : 1;
 
   const isInCart = cart.some((item) => item.id === product.id);
- 
-
-  const { addToWishList, removeFromWishList, isWishList } = useWishlist();
-
   const isWishListed = isWishList(product.id);
 
   const ToggleEffect = async () => {
+
     if (!user) {
-      toast.error("please login to save items");
+      toast.error("Please login to save items");
       return;
     }
+
     try {
-      if (isWishList(product.id)) {
+
+      if (isWishListed) {
+
         await removeFromWishList(product.id);
         toast.success(`${product.name} removed from wishlist`);
+
       } else {
+
         await addToWishList(product);
         toast.success(`${product.name} added to wishlist`);
+
       }
-    } catch (err) {
-      toast.error("failed to update wishlist");
+
+    } catch {
+
+      toast.error("Failed to update wishlist");
+
     }
+
   };
 
   const handleAddToCart = () => {
+
     if (!user) {
-      toast.error("please login to add items to cart");
-    }else{
-addToCart(product, 1);
-    toast.success(`${product.name} added to cart`)
+      toast.error("Please login to add items to cart");
+      return;
     }
-    
-    
+
+    addToCart(product, 1);
+
+    toast.success(`${product.name} added to cart`);
+
   };
 
   const handleIncrease = () => {
+
     updateCartQuantity(product.id, quantity + 1);
+
   };
 
   const handleDecrease = () => {
+
     if (quantity > 1) {
       updateCartQuantity(product.id, quantity - 1);
     } else {
       updateCartQuantity(product.id, 0);
     }
+
   };
 
   const handleGoToCart = () => {
-    navigate("/cart");
-  };
 
-  if (!product) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Product Not Found
-          </h2>
-          <p className="text-gray-600">
-            The product you're looking for doesn't exist.
-          </p>
-        </div>
-      </div>
-    );
-  }
+    navigate("/cart");
+
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div className="max-w-7xl mx-auto px-4">
+
         <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+
           <div className="grid lg:grid-cols-2 gap-12">
+
             <div className="flex justify-center">
+
               <div className="relative aspect-square w-full max-w-md overflow-hidden rounded-xl bg-gray-100">
+
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
+
                 <button
                   onClick={ToggleEffect}
-                  className={`absolute top-2 right-2 p-2 rounded-full transition-all z-20 ${
+                  className={`absolute top-2 right-2 p-2 rounded-full ${
                     isWishListed
                       ? "bg-white text-pink-500"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
+                      : "bg-white text-gray-600"
                   }`}
-                  // title={
-                  //   isWishListed ? "Remove from wishlist" : "Add to wishlist"
-                  // }
                 >
                   <Heart
                     size={20}
                     fill={isWishListed ? "currentColor" : "none"}
                   />
                 </button>
+
               </div>
+
             </div>
 
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <span className="inline-block px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm font-medium capitalize">
-                  {product.category}
-                </span>
-              </div>
 
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+              <span className="inline-block px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm capitalize">
+                {product.category?.name || product.category}
+              </span>
+
+              <h1 className="text-3xl font-bold">
                 {product.name}
               </h1>
 
-              <div className="flex items-center space-x-4">
-                <span className="text-3xl font-bold text-gray-900">
-                  ${product.price}
-                </span>
-              </div>
+              <span className="text-3xl font-bold">
+                ₹{product.price}
+              </span>
 
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Description
-                </h3>
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  {product.description}
-                </p>
-              </div>
+              <p className="text-gray-700">
+                {product.description}
+              </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Truck size={20} className="text-green-500" />
+              <div className="grid grid-cols-3 gap-4">
+
+                <div className="flex items-center gap-2">
+                  <Truck size={20} />
                   <span className="text-sm">Free Shipping</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <RotateCcw size={20} className="text-blue-500" />
-                  <span className="text-sm">30-Day Returns</span>
+
+                <div className="flex items-center gap-2">
+                  <RotateCcw size={20} />
+                  <span className="text-sm">30 Day Returns</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Shield size={20} className="text-amber-500" />
-                  <span className="text-sm">2-Year Warranty</span>
+
+                <div className="flex items-center gap-2">
+                  <Shield size={20} />
+                  <span className="text-sm">Warranty</span>
                 </div>
+
               </div>
+
               {isInCart && (
-                <div className="space-y-3">
-                  <label className="text-sm font-medium text-gray-900">
-                    Quantity
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <div className="flex border border-gray-300 rounded-lg">
-                      <button
-                        onClick={handleDecrease}
-                        className="px-4 py-3 hover:bg-gray-50 transition-colors"
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span className="px-6 py-3 text-lg font-medium min-w-[60px] text-center">
-                        {quantity}
-                      </span>
-                      <button
-                        onClick={handleIncrease}
-                        className="px-4 py-3 hover:bg-gray-50 transition-colors"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                    <span className="text-sm text-gray-600">
-                      {quantity} {quantity === 1 ? "item" : "items"}
-                    </span>
-                  </div>
+
+                <div className="flex items-center gap-4">
+
+                  <button onClick={handleDecrease}>
+                    <Minus />
+                  </button>
+
+                  <span>{quantity}</span>
+
+                  <button onClick={handleIncrease}>
+                    <Plus />
+                  </button>
+
                 </div>
+
               )}
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                { isInCart ? (
-                  <button
-                    className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"
-                    onClick={handleGoToCart}
-                  >
-                    <ShoppingCart size={20} />
-                    Go to cart
-                  </button>
-                ) : (
-                  <button
-                    className="flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors flex-1 font-medium"
-                    onClick={handleAddToCart}
-                  >
-                    <ShoppingCart size={20} />
-                    Add to Cart
-                  </button>
-                )}
-              </div>
+              {isInCart ? (
+
+                <button
+                  onClick={handleGoToCart}
+                  className="bg-black text-white px-6 py-3 rounded-lg"
+                >
+                  Go To Cart
+                </button>
+
+              ) : (
+
+                <button
+                  onClick={handleAddToCart}
+                  className="bg-black text-white px-6 py-3 rounded-lg flex items-center gap-2"
+                >
+                  <ShoppingCart size={18} />
+                  Add To Cart
+                </button>
+
+              )}
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }

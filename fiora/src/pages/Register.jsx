@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    Username: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -21,10 +21,10 @@ const navigate = useNavigate()
     const newErrors = {};
 
 
- if (!formData.Username.trim()) {
-    newErrors.Username = "Username is required";
-  } else if (!/^[A-Za-z]/.test(formData.Username.trim())) {
-    newErrors.Username = "Username must start with a letter";
+ if (!formData.username.trim()) {
+    newErrors.username = "username is required";
+  } else if (!/^[A-Za-z]/.test(formData.username.trim())) {
+    newErrors.username = "username must start with a letter";
   }
 
   
@@ -60,7 +60,7 @@ const handleSubmit = async (e) => {
   if (Object.keys(newErrors).length === 0) {
     try {
     const userData ={
-Username: formData.Username.trim(),
+username: formData.username.trim(),
       email: formData.email.toLowerCase().trim(),
       password:formData.password,
     }
@@ -102,19 +102,19 @@ useEffect(() => {
                 htmlFor="firstName"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-            Username
+            username
               </label>
               <input
                 type="text"
-                id="Username"
-                name="Username"
-                value={formData.Username}
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 placeholder="Enter your first name"
               />
-              {errors.Username && (
-                <p className="mt-1 text-sm text-red-600">{errors.Username}</p>
+              {errors.username && (
+                <p className="mt-1 text-sm text-red-600">{errors.username}</p>
               )}
             </div>
 

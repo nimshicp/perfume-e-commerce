@@ -87,7 +87,7 @@ const Navbar = () => {
                 >
                   <User size={22} className="text-gray-700 hover:text-gray-900" />
                   <span className="text-gray-700 font-semibold">
-                     {user.Username}
+                     {user.username}
                   </span>
                 </div>
 {isAdmin && <button
