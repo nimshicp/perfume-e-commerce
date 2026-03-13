@@ -1,6 +1,6 @@
 import React from "react";
 import { useShop } from "../context/ShopContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import {
   Trash2,
@@ -8,7 +8,6 @@ import {
   Minus,
   ShoppingBag,
   ArrowLeft,
-  CreditCard,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -25,7 +24,6 @@ function Cart() {
   } = useShop();
 
   const navigate = useNavigate();
-  
 
   const cartLength = cart?.length || 0;
 
@@ -76,8 +74,6 @@ function Cart() {
     );
   }
 
- 
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-2xl">
@@ -99,70 +95,85 @@ function Cart() {
 
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
           <div className="space-y-4">
-            {cart?.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:shadow-sm transition-shadow"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 object-cover rounded-lg"
-                  onClick={() => navigate(`/products/${item.id}`, { state: { product: item } })}
+            {cart?.map((item) => {
+              const product = item.product;
 
-                />
+              return (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:shadow-sm transition-shadow"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-16 h-16 object-cover rounded-lg"
+                    onClick={() =>
+                      navigate(`/products/${product.id}`, {
+                        state: { product },
+                      })
+                    }
+                  />
 
-                <div className="flex-1 min-w-0" onClick={() => navigate(`/products/${item.id}`, { state: { product: item } })}
->
-                  <h3 className="font-semibold text-gray-900 truncate">
-                    {item.name}
-                  </h3>
-                  <p className="text-gray-600">${item.price}</p>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1">
-                    <button
-                      onClick={(e) => {
-            e.stopPropagation();
-            updateCartQuantity(item.id, item.quantity - 1);
-          }}
-                      className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white transition-colors"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-8 text-center font-medium text-sm">
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={(e) => {
-            e.stopPropagation();
-            updateCartQuantity(item.id, item.quantity + 1);
-          }}
-                      className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <div className="w-20 text-right font-semibold text-gray-900">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </div>
-
-                  <button
-                    onClick={(e) => {
-          e.stopPropagation();
-          removeFromCart(item.id);
-          toast.success(`${item.name} removed from cart`);
-        }}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                    title="Remove item"
+                  <div
+                    className="flex-1 min-w-0"
+                    onClick={() =>
+                      navigate(`/products/${product.id}`, {
+                        state: { product },
+                      })
+                    }
                   >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                    <h3 className="font-semibold text-gray-900 truncate">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-600">${product.price}</p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateCartQuantity(product.id, item.quantity - 1);
+                        }}
+                        className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+
+                      <span className="w-8 text-center font-medium text-sm">
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateCartQuantity(product.id, item.quantity + 1);
+                        }}
+                        className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="w-20 text-right font-semibold text-gray-900">
+                      ${(product.price * item.quantity).toFixed(2)}
+                    </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFromCart(product.id);
+                        toast.success(`${product.name} removed from cart`);
+                      }}
+                      className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                      title="Remove item"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -183,6 +194,7 @@ function Cart() {
             >
               Clear All
             </button>
+
             <button
               onClick={() => navigate("/checkout")}
               className="flex-1 bg-gray-800 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"

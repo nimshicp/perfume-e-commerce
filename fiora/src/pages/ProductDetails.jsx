@@ -27,7 +27,7 @@ function ProductDetails() {
 
   const { addToCart, updateCartQuantity, cart } = useShop();
   const { user } = useUser();
-  const { addToWishList, removeFromWishList, isWishList } = useWishlist();
+  const { handleWishlist, isWishList } = useWishlist();
 
   useEffect(() => {
     fetchProduct();
@@ -71,32 +71,28 @@ function ProductDetails() {
 
   const ToggleEffect = async () => {
 
-    if (!user) {
-      toast.error("Please login to save items");
-      return;
+  if (!user) {
+    toast.error("Please login to save items");
+    return;
+  }
+
+  try {
+
+    const res = await handleWishlist(product.id);
+
+    if (res?.data?.status === "added") {
+      toast.success(`${product.name} added to wishlist`);
+    } else {
+      toast.success(`${product.name} removed from wishlist`);
     }
 
-    try {
+  } catch {
 
-      if (isWishListed) {
+    toast.error("Failed to update wishlist");
 
-        await removeFromWishList(product.id);
-        toast.success(`${product.name} removed from wishlist`);
+  }
 
-      } else {
-
-        await addToWishList(product);
-        toast.success(`${product.name} added to wishlist`);
-
-      }
-
-    } catch {
-
-      toast.error("Failed to update wishlist");
-
-    }
-
-  };
+};
 
   const handleAddToCart = () => {
 

@@ -96,48 +96,50 @@ function Products() {
   return (
     <>
       {/* SEARCH + FILTER */}
-      <div className="w-full bg-white border-b px-4 py-3 flex gap-4">
+      <div className="w-full bg-white border-b px-4 py-3 flex gap-4 relative">
 
-        <button
-          onClick={() => setShowFilter(!showFilter)}
-          className="flex items-center gap-2 border px-3 py-2 rounded"
-        >
-          <Menu size={18} />
-          Filter
-          <ChevronDown size={16} />
-        </button>
+  <button
+    onClick={() => setShowFilter(!showFilter)}
+    className="flex items-center gap-2 border px-3 py-2 rounded"
+  >
+    <Menu size={18} />
+    Filter
+    <ChevronDown size={16} />
+  </button>
 
-        {showFilter && (
-          <div className="absolute bg-white shadow border mt-12 p-2">
-            <button
-              onClick={() => handleFilter("lowToHigh")}
-              className="block px-4 py-2 hover:bg-gray-100"
-            >
-              Price Low → High
-            </button>
-            <button
-              onClick={() => handleFilter("highToLow")}
-              className="block px-4 py-2 hover:bg-gray-100"
-            >
-              Price High → Low
-            </button>
-          </div>
-        )}
+  {showFilter && (
+    <div className="absolute left-4 top-14 bg-white shadow-lg border p-2 z-50 rounded">
+      <button
+        onClick={() => handleFilter("lowToHigh")}
+        className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+      >
+        Price Low → High
+      </button>
 
-        <input
-          className="flex-1 border px-4 py-2 rounded"
-          placeholder="Search products"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <button
+        onClick={() => handleFilter("highToLow")}
+        className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+      >
+        Price High → Low
+      </button>
+    </div>
+  )}
 
-        <button
-          onClick={handleSearch}
-          className="bg-gray-900 text-white px-4 rounded"
-        >
-          <Search size={20} />
-        </button>
-      </div>
+  <input
+    className="flex-1 border px-4 py-2 rounded"
+    placeholder="Search products"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+
+  <button
+    onClick={handleSearch}
+    className="bg-gray-900 text-white px-4 rounded"
+  >
+    <Search size={20} />
+  </button>
+
+</div>
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-4 gap-6 p-6">

@@ -1,28 +1,26 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { useWishlist } from "../context/WishlistContext";
 import toast from "react-hot-toast";
 
 function ProductCard({ product }) {
-
   const navigate = useNavigate();
 
   const { addToCart, cart } = useShop();
   const { user } = useUser();
+  const { handleWishlist, isWishList } = useWishlist();
 
-  const { addToWishList, removeFromWishList, isWishList } = useWishlist();
-
-  const isWishListed = isWishList(product.id);
-
-  const isInCart = cart.some((item) => item.id === product.id);
+  const isWishListed = isWishList(product?.id);
+  const isInCart = cart.some((item) => item.id === product?.id);
 
   const [goToCart, setGoToCart] = useState(isInCart);
 
-
-  const ToggleEffect = async () => {
+  const handleToggleWishlist = async (e) => {
+    e.stopPropagation();
 
     if (!user) {
       toast.error("Please login to save items");
@@ -30,30 +28,19 @@ function ProductCard({ product }) {
     }
 
     try {
+      const res = await handleWishlist(product.id);
 
-      if (isWishListed) {
-
-        await removeFromWishList(product.id);
-        toast.success(`${product.name} removed from wishlist`);
-
-      } else {
-
-        await addToWishList(product);
+      if (res?.data?.status === "added") {
         toast.success(`${product.name} added to wishlist`);
-
+      } else {
+        toast.success(`${product.name} removed from wishlist`);
       }
-
     } catch {
-
       toast.error("Failed to update wishlist");
-
     }
-
   };
 
-
   const handleAddToCart = (e) => {
-
     e.stopPropagation();
 
     if (!user) {
@@ -61,132 +48,113 @@ function ProductCard({ product }) {
       return;
     }
 
+    if (product?.stock === 0) {
+      toast.error("Product is out of stock");
+      return;
+    }
+
     addToCart(product, 1);
     setGoToCart(true);
 
     toast.success(`${product.name} added to cart`);
-
   };
-
 
   const handleGoToCart = (e) => {
-
     e.stopPropagation();
     navigate("/cart");
-
   };
-
-
-  const handleViewProduct = (e) => {
-
-    e.stopPropagation();
-
-    // navigate using product id only
-    navigate(`/products/${product.id}`);
-
-  };
-
 
   return (
-
     <div
-      onClick={() => navigate(`/products/${product.id}`)}
+      onClick={() => navigate(`/products/${product?.id}`)}
       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col cursor-pointer"
     >
-
       <div className="relative">
-
         <img
-          src={product.image}
-          alt={product.name}
+          src={product?.image}
+          alt={product?.name}
           className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
         />
 
+        {/* Wishlist */}
         <button
-          onClick={ToggleEffect}
-          className={`absolute top-2 right-2 p-2 rounded-full transition-all z-10 ${
+          onClick={handleToggleWishlist}
+          className={`absolute top-2 right-2 p-2 rounded-full z-10 ${
             isWishListed
               ? "bg-white text-pink-500"
-              : "bg-white text-gray-600 hover:bg-white"
+              : "bg-white text-gray-600"
           }`}
         >
           <Heart size={20} fill={isWishListed ? "currentColor" : "none"} />
         </button>
 
+        {/* Out of stock badge */}
+        {product?.stock === 0 && (
+          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+            Out of Stock
+          </span>
+        )}
       </div>
 
-
       <div className="p-4 flex-1 flex flex-col justify-between">
-
         <div>
 
+          {/* Category */}
+          <p className="text-sm text-gray-500 capitalize">
+            {product?.category?.name || product?.category}
+          </p>
+
+          {/* Product Name */}
           <h3 className="font-semibold text-lg text-gray-800 mb-2">
-            {product.name}
+            {product?.name}
           </h3>
 
-
-          <div className="flex items-center gap-2 mb-1">
-
-            <span
-              className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                product.stock > 10
-                  ? "bg-green-100 text-green-800"
-                  : product.stock > 0
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {product.stock > 0 ? `${product.stock} left` : "Out of Stock"}
-            </span>
-
-          </div>
-
-
-          <div className="flex items-center justify-between mb-3">
-
+          {/* Price */}
+          <div className="flex items-center justify-between mb-2">
             <span className="text-lg font-bold text-gray-900">
-              ₹{product.price}
+              ₹{product?.price}
             </span>
-
-            <span className="px-2 py-1 rounded-full text-xs font-medium text-white bg-gray-900">
-              {product.category?.name || product.category}
-            </span>
-
           </div>
 
+          {/* Stock */}
+          <p
+            className={`text-sm ${
+              product?.stock > 0 ? "text-green-600" : "text-red-500"
+            }`}
+          >
+            {product?.stock > 0
+              ? `In Stock (${product.stock})`
+              : "Out of Stock"}
+          </p>
         </div>
 
-
-        <div className="flex gap-2">
-
+        {/* Cart Button */}
+        <div className="mt-3">
           {goToCart ? (
-
             <button
               onClick={handleGoToCart}
-              className="flex-1 bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+              className="w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700"
             >
               Go to Cart
             </button>
-
           ) : (
-
             <button
               onClick={handleAddToCart}
-              className="flex-1 bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+              disabled={product?.stock === 0}
+              className={`w-full py-2 rounded-lg ${
+                product?.stock === 0
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-800 text-white hover:bg-gray-700"
+              }`}
             >
-              Add to Cart
+              {product?.stock === 0 ? "Out of Stock" : "Add to Cart"}
             </button>
-
           )}
-
         </div>
-
       </div>
-
     </div>
-
   );
-
 }
 
 export default ProductCard;
+

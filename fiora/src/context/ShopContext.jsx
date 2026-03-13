@@ -1,154 +1,142 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useUser } from "./UserContext";
-import axios from "axios";
 import toast from "react-hot-toast";
+
+import {
+  getCart,
+  AddToCart,
+  decreaseCart,
+  removeCart,
+  clearCartitem,
+} from "../api/cartApi";
 
 const ShopContext = createContext();
 
 export const ShopProvider = ({ children }) => {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
+
+  const [cart, setCart] = useState([]);
   const [error, setError] = useState("");
 
 
 
-
-
-
-  const UpdateDb = async (update) => {
+  const fetchCart = async () => {
     if (!user) {
-      return null;
+      setCart([]);
+      return;
     }
+
     try {
-      const response = await axios.patch(
-        `http://localhost:5000/users/${user.id}`,
-        update
-      );
-      const updatedUser = response.data;
-
-      setUser(updatedUser);
-      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-      return updatedUser;
+      const res = await getCart();
+      setCart(res.data);
     } catch (err) {
-      setError("failed to update");
+      setError("Failed to load cart");
     }
   };
 
 
 
+  useEffect(() => {
+    fetchCart();
+  }, [user]);
 
 
 
-
-useEffect(() => {
-  const syncUser = (e) => {
-    if (e.key === "currentUser") {
-      const updatedUser = JSON.parse(e.newValue);
-      setUser(updatedUser);
-    }
-  };
-
-  window.addEventListener("storage", syncUser);
-
-  return () => window.removeEventListener("storage", syncUser);
-}, [setUser]);
-
-
-
-
-
-
-
-  const addToCart = async (product, quantity = 1) => {
+  const addToCart = async (product) => {
     if (!user) {
-      setError("please login");
-      return null;
+      toast.error("Please login to add items to cart");
+      return;
     }
 
-    
-
-    const currentCart = user.cart || [];
-    const existingItem = currentCart.find((item) => item.id === product.id);
-
-    let newCart;
-    if (existingItem) {
-
-      newCart = currentCart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-    } else {
-      newCart = [...currentCart, { ...product, quantity }];
+    try {
+      await AddToCart(product.id);
+      toast.success(`${product.name} added to cart`);
+      fetchCart();
+    } catch {
+      toast.error("Failed to add item");
     }
-
-  return await UpdateDb({ cart: newCart });
-    
   };
 
 
+
+  const updateCartQuantity = async (productId, quantity) => {
+    if (!user) return;
+
+    try {
+      if (quantity < 1) {
+        await removeCart(productId);
+      } else {
+        await decreaseCart(productId);
+      }
+
+      fetchCart();
+    } catch {
+      toast.error("Failed to update quantity");
+    }
+  };
 
 
 
   const removeFromCart = async (productId) => {
     if (!user) return;
 
-    const currentCart = user.cart || [];
-    const newCart = currentCart.filter((item) => item.id !== productId);
-    return await UpdateDb({ cart: newCart });
-  };
+    try {
+      await removeCart(productId);
 
-  const updateCartQuantity = async (productId, newQuantity) => {
-    if (!user) return;
+      setCart((prev) =>
+        prev.filter((item) => item.product.id !== productId)
+      );
 
-    if (newQuantity < 1) {
-      return await removeFromCart(productId);
+      toast.success("Item removed");
+    } catch {
+      toast.error("Failed to remove item");
     }
-
-    const currentCart = user.cart || [];
-    const newCart = currentCart.map((item) =>
-      item.id === productId ? { ...item, quantity: newQuantity } : item
-    );
-    return await UpdateDb({ cart: newCart });
   };
 
-  const cart = user?.cart || [];
 
-
-
-
-  
-  const cartTotal = useMemo(
-    () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [cart]
-  );
-
-  const cartItemsCount = useMemo(
-    () => cart.reduce((sum, item) => sum + item.quantity, 0),
-    [cart]
-  );
 
   const clearCart = async () => {
     if (!user) return;
 
-    return await UpdateDb({ cart: [] });
+    try {
+      await clearCartitem();
+      setCart([]);
+    } catch {
+      toast.error("Failed to clear cart");
+    }
   };
 
 
+
+  const cartTotal = useMemo(
+    () =>
+      cart.reduce(
+        (sum, item) => sum + item.product.price * item.quantity,
+        0
+      ),
+    [cart]
+  );
+
+
+
+  const cartItemsCount = useMemo(
+    () =>
+      cart.reduce((sum, item) => sum + item.quantity, 0),
+    [cart]
+  );
 
 
 
   return (
     <ShopContext.Provider
       value={{
-        addToCart,
         cart,
+        addToCart,
         removeFromCart,
         updateCartQuantity,
+        clearCart,
         cartTotal,
         cartItemsCount,
-        clearCart,
-        
-       
       }}
     >
       {children}

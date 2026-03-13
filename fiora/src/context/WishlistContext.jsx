@@ -1,96 +1,92 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "./UserContext";
-import axios from "axios";
+import {
+  getWishlist,
+  toggleWishlist,
+  removeWishlist,
+} from "../api/wishlistApi";
 
 const WishlistContext = createContext();
 
-export const WishlistProvider = ({children}) => {
-  const { user, setUser } = useUser();
-  const [error,setError]=useState("")
-   
-  
-  
+export const WishlistProvider = ({ children }) => {
+  const { user } = useUser();
 
-  const UpdateDb = async (update) => {
+  const [wishlist, setWishlist] = useState([]);
+  const [error, setError] = useState("");
+
+  // Fetch wishlist from backend
+  const fetchWishlist = async () => {
     if (!user) {
-      return null;
-    }
-    try {
-      const response = await axios.patch(
-        `http://localhost:5000/users/${user.id}`,
-        update
-      );
-      const updatedUser = response.data;
-
-      setUser(updatedUser);
-      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-      return updatedUser;
-    } catch (err) {
-      setError("failed to update");
-    }
-  };
-
-
-
-
-
-useEffect(() => {
-  const syncUser = (e) => {
-    if (e.key === "currentUser") {
-      const updatedUser = JSON.parse(e.newValue);
-      setUser(updatedUser);
-    }
-  };
-
-  window.addEventListener("storage", syncUser);
-
-  return () => window.removeEventListener("storage", syncUser);
-}, [setUser]);
-
-
-
-
-
-
-
-  const addToWishList = async (product) => {
-    if (!user) return;
-
-    const currentWishList = user.wishlist || [];
-    const existing = currentWishList.find((item) => item.id === product.id);
-
-    if (existing) {
-      setError("item is already included");
-      
+      setWishlist([]);
       return;
     }
 
-    const newWishList = [...currentWishList, product];
-    return await UpdateDb({ wishlist: newWishList });
+    try {
+      const res = await getWishlist();
+      setWishlist(res.data.results || []);
+    } catch (err) {
+      setError("Failed to load wishlist");
+    }
   };
 
-  const removeFromWishList = async (productId) => {
+  // Toggle wishlist
+  const handleWishlist = async (productId) => {
     if (!user) return;
-    const currentWishList = user.wishlist || [];
-    const newWishList = currentWishList.filter((item) => item.id !== productId);
-    return await UpdateDb({ wishlist: newWishList });
+
+    try {
+      const res = await toggleWishlist(productId);
+
+      if (res.data.status === "added") {
+        // instantly update UI
+        setWishlist((prev) => [
+          ...prev,
+          { product: { id: productId } },
+        ]);
+      } else {
+        // remove instantly
+        setWishlist((prev) =>
+          prev.filter((item) => item?.product?.id !== productId)
+        );
+      }
+
+      return res;
+    } catch (err) {
+      setError("Wishlist update failed");
+      throw err;
+    }
   };
 
+  // Remove from wishlist page
+  const removeFromWishList = async (productId) => {
+    try {
+      await removeWishlist(productId);
+
+      setWishlist((prev) =>
+        prev.filter((item) => item?.product?.id !== productId)
+      );
+    } catch (err) {
+      setError("Remove failed");
+    }
+  };
+
+  // Check if item is wishlisted
   const isWishList = (productId) => {
-    return user?.wishlist?.some((item) => item.id === productId) || false;
+    return wishlist.some((item) => item?.product?.id === productId);
   };
-  const wishlist = user?.wishlist || [];
 
-
-
-
-
-
-
+  // Fetch wishlist when user logs in
+  useEffect(() => {
+    fetchWishlist();
+  }, [user]);
 
   return (
     <WishlistContext.Provider
-      value={{ addToWishList, removeFromWishList, isWishList, wishlist}}
+      value={{
+        wishlist,
+        handleWishlist,
+        removeFromWishList,
+        isWishList,
+      }}
     >
       {children}
     </WishlistContext.Provider>
