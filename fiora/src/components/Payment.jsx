@@ -1,49 +1,65 @@
 import React, { useState } from "react";
 import { useOrder } from "../context/OrderContext";
 import { useNavigate } from "react-router-dom";
-import {Lock,Smartphone,Truck} from "lucide-react"
+import { Lock, Smartphone, Truck } from "lucide-react";
 import toast from "react-hot-toast";
 
 function Payment({ order, amount }) {
+
   const { processUPIPayment, cashOnDelivery } = useOrder();
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [upiId, setUpiId] = useState("");
 
   const handlePayment = async () => {
+
     if (!paymentMethod) {
       toast.error("please select a payment method");
       return;
     }
+
     setLoading(true);
 
     try {
+
       let result;
 
       if (paymentMethod === "upi") {
+
         if (!upiId.includes("@")) {
           toast.error("please enter a valid upiId");
           setLoading(false);
           return;
         }
+
         result = await processUPIPayment(order.id, upiId);
+
       } else if (paymentMethod === "cod") {
+
         result = await cashOnDelivery(order.id);
+
       }
 
-      if (result) {
+      if (result?.success || result) {
         navigate(`/order-confirmation/${order.id}`);
       }
+
     } catch (err) {
+
       toast.error("payment failed please try again");
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6">
+
       <h2 className="text-xl font-bold text-gray-900 mb-4">Payment</h2>
       <p className="text-gray-600 mb-2">Order #{order.id}</p>
 
@@ -51,12 +67,13 @@ function Payment({ order, amount }) {
         <div className="flex justify-between items-center">
           <span className="font-semibold">Total</span>
           <span className="text-2xl font-bold text-gray-900">
-            ${amount.toFixed(2)}
+            ${Number(amount).toFixed(2)}
           </span>
         </div>
       </div>
 
       <div className="space-y-3 mb-6">
+
         <h3 className="font-semibold text-gray-900">Choose Payment</h3>
 
         <div
@@ -85,7 +102,6 @@ function Payment({ order, amount }) {
           )}
         </div>
 
-
         <div
           className={`p-3 border rounded-lg cursor-pointer ${
             paymentMethod === "cod"
@@ -99,6 +115,7 @@ function Payment({ order, amount }) {
             <span className="font-medium">Cash on Delivery</span>
           </div>
         </div>
+
       </div>
 
       <button
@@ -108,6 +125,7 @@ function Payment({ order, amount }) {
         }
         className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 flex items-center justify-center"
       >
+
         {loading ? (
           "Processing..."
         ) : (
@@ -115,12 +133,14 @@ function Payment({ order, amount }) {
             <Lock className="w-5 h-5 mr-2" />
             {paymentMethod === "cod"
               ? "Confirm COD Order"
-              : `Pay $${amount.toFixed(2)}`}
+              : `Pay $${Number(amount).toFixed(2)}`}
           </>
         )}
+
       </button>
+
     </div>
-  )
+  );
 }
 
 export default Payment;

@@ -1,194 +1,220 @@
 import React, { createContext, useContext, useState } from "react";
-import { useUser } from "./UserContext";
-import axios from "axios";
 import { useShop } from "./ShopContext";
+import { useUser } from "./UserContext";
+
+import {
+  checkoutApi,
+  createOrderApi,
+  getMyOrdersApi,
+  getOrderDetailApi,
+  cancelOrderApi,
+  codPaymentApi,
+  upiPaymentApi,
+} from "../api/orderApi";
 
 const OrderContext = createContext();
-export const OrderProvider = ({ children }) => {
-  const { user, setUser } = useUser();
-  const [error, setError] = useState("");
-  const { cart, cartTotal, clearCart } = useShop();
-  const UpdateDb = async (update) => {
-    if (!user) {
-      return null;
-    }
-    try {
-      const response = await axios.patch(
-        `http://localhost:5000/users/${user.id}`,
-        update
-      );
-      const updatedUser = response.data;
 
-      setUser(updatedUser);
-      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-      return updatedUser;
+export const OrderProvider = ({ children }) => {
+
+  const { user } = useUser();
+  const { clearCart } = useShop();
+
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState("");
+
+
+
+  // Checkout → calculate total
+  const checkout = async () => {
+
+    try {
+
+      const data = await checkoutApi();
+      return data.amount;
+
     } catch (err) {
-      setError("failed to update");
+
+      setError("Checkout failed");
+      return null;
+
     }
+
   };
 
-const reduceStock = async (items) => {
-  for (let item of items) {
-    const productResponse = await axios.get(`http://localhost:5000/products/${item.id}`);
-    const product = productResponse.data;
-    const newStock = product.stock - item.quantity;
-    await axios.patch(`http://localhost:5000/products/${item.id}`, { stock: newStock });
-  }
-};
 
-const restoreStock = async (items) => {
-  for (let item of items) {
-    const productResponse = await axios.get(`http://localhost:5000/products/${item.id}`);
-    const product = productResponse.data;
-    const restoredStock = product.stock + item.quantity;
-    await axios.patch(`http://localhost:5000/products/${item.id}`, { stock: restoredStock });
-  }
-};
 
-  const createOrder = async (orderData) => {
+  // Create Order
+  const createOrder = async (formData, cart, cartTotal) => {
+
     if (!user) {
-      setError("please login to create order");
+      setError("Please login first");
       return null;
     }
 
     try {
-      const order = {
-        id: Date.now(),
-        userId: user.id,
-        items: cart,
+
+      const orderData = {
+
         total: cartTotal,
-        status: "pending",
-        shippingAddress: orderData.shippingAddress || "",
-        paymentMethod: orderData.paymentMethod || "",
-        paymentStatus: "pending",
-        customerInfo: orderData.customerInfo|| {},
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+
+        shipping_address: `${formData.address}, ${formData.city}, ${formData.pinCode}`,
+
+        // payment selected later
+        payment_method: "pending",
+
+        items: cart.map((item) => ({
+          product: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price,
+        })),
+
       };
 
-      const currentOrders = user.orders || [];
-      const newOrders = [...currentOrders, order];
-      const updatedUser = await UpdateDb({
-        orders: newOrders,
-        cart: [],
-      });
+      const order = await createOrderApi(orderData);
+
+      clearCart();
+
+      await fetchOrders();
+
       return order;
+
     } catch (err) {
-      setError("failed to create order");
+
+      setError("Failed to create order");
       return null;
+
     }
+
   };
 
-  const processUPIPayment = async (orderId, upiId) => {
-    if (!user) return null;
+
+
+  // Fetch user orders
+  const fetchOrders = async () => {
+
+    if (!user) return;
+
     try {
-      const orders = user.orders || [];
-      const updatedOrders = orders.map((order) => {
-        if (order.id === orderId) {
-          reduceStock(order.items)
-          return {
-        
-  ...order,
-  paymentMethod: "UPI",
-  paymentStatus: "paid",
-  status: "confirmed",
-  paidAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  createdAt: order.createdAt, // 👈 keep original
 
-          };
-        }
-        return order;
-      });
-      const updatedUser = await UpdateDb({ orders: updatedOrders });
-      return updatedUser;
+      const data = await getMyOrdersApi();
+      setOrders(data);
+
     } catch (err) {
-      setError("UPI payment failed");
-      alert("UPI payment failed");
-      return null;
+
+      setError("Failed to fetch orders");
+
     }
+
   };
 
+
+
+  // Get single order
+  const getOrderById = async (orderId) => {
+
+    try {
+
+      const order = await getOrderDetailApi(orderId);
+      return order;
+
+    } catch (err) {
+
+      setError("Failed to fetch order");
+      return null;
+
+    }
+
+  };
+
+
+
+  // Cancel Order
+  const cancelOrder = async (orderId) => {
+
+    try {
+
+      await cancelOrderApi(orderId);
+
+      await fetchOrders();
+
+    } catch (err) {
+
+      setError("Failed to cancel order");
+
+    }
+
+  };
+
+
+
+  // COD Payment
   const cashOnDelivery = async (orderId) => {
-    if (!user) return null;
+
     try {
-      const orders = user.orders || [];
-      const updatedOrders = orders.map((order) => {
-        if (order.id === orderId) {
-          reduceStock(order.items)
-          return {
-            ...order,
-            paymentMethod: "cash on delivery",
-            paymentStatus: "pending",
-            status: "confirmed",
-            updatedAt: new Date().toISOString(),
-            createdAt: order.createdAt,
-          };
-        }
-        return order;
-      });
-      const updatedUser = await UpdateDb({ orders: updatedOrders });
-      return updatedUser;
+
+      const response = await codPaymentApi(orderId);
+
+      await fetchOrders();
+
+      return response;
+
     } catch (err) {
-      setError("failed to confirm");
-      alert("failed to confirm");
+
+      setError("COD confirmation failed");
       return null;
+
     }
+
   };
 
 
 
+  // UPI Payment
+  const processUPIPayment = async (orderId, upiId) => {
 
+    try {
 
-const cancelOrder = async (orderId) => {
-  if (!user) return null;
+      const response = await upiPaymentApi(orderId, upiId);
 
-  try {
-    const orders = user.orders || [];
-    const updatedOrders = orders.map((order) => {
-      if (order.id === orderId) {
-        restoreStock(order.items)
-        return {
-          ...order,
-          status: 'cancelled',
-          paymentStatus: order.paymentStatus === 'paid' ? 'refunded' : 'cancelled',
-          cancelledAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-          
-        };
-      }
-      return order;
-    });
+      await fetchOrders();
 
-    const updatedUser = await UpdateDb({ orders: updatedOrders });
-    return updatedUser;
-  } catch (err) {
-    setError('Failed to cancel order');
-    return null;
-  }
-};
+      return response;
 
+    } catch (err) {
 
+      setError("UPI payment failed");
+      return null;
 
+    }
 
-
-  const getUserOrders = () => {
-    if (!user) return [];
-    return user.orders || [];
   };
 
-  const getOrderById = (orderId) => {
-    if (!user) return null;
-    const orders = user.orders || [];
-    return orders.find((order) => order.id === orderId) || null;
-  };
-  const orders = user?.orders || [];
+
 
   return (
-    <OrderContext.Provider value={{ createOrder, getUserOrders, getOrderById , cashOnDelivery,processUPIPayment,cancelOrder,orders}}>
+
+    <OrderContext.Provider
+      value={{
+
+        checkout,
+        createOrder,
+        fetchOrders,
+        getOrderById,
+        cancelOrder,
+        processUPIPayment,
+        cashOnDelivery,
+        orders,
+        error,
+
+      }}
+    >
+
       {children}
+
     </OrderContext.Provider>
+
   );
+
 };
 
 export const useOrder = () => useContext(OrderContext);

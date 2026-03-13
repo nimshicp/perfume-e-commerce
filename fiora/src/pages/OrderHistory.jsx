@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useOrder } from "../context/OrderContext";
 import {
@@ -6,44 +6,49 @@ import {
   Calendar,
   MapPin,
   CreditCard,
-  X,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
 function OrderHistory() {
-  const { getUserOrders, cancelOrder } = useOrder();
-  const orders = getUserOrders();
+
+  const { orders, fetchOrders, cancelOrder } = useOrder();
+
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  function handleCancel(orderId) {
-  toast((t) => (
-    <div className="flex flex-col gap-2">
-      <p>Are you sure you want to cancel this order?</p>
-      <div className="flex gap-2 justify-end">
-        <button
-          className="bg-red-500 text-white px-3 py-1 rounded"
-          onClick={() => {
-            toast.dismiss(t.id); 
-            cancelOrder(orderId);
-            toast.success("Order canceled successfully!");
-          }}
-        >
-          Yes
-        </button>
-        <button
-          className="bg-gray-300 px-3 py-1 rounded"
-          onClick={() => toast.dismiss(t.id)}
-        >
-          No
-        </button>
-      </div>
-    </div>
-  ));
-}
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
+  function handleCancel(orderId) {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p>Are you sure you want to cancel this order?</p>
+        <div className="flex gap-2 justify-end">
+          <button
+            className="bg-red-500 text-white px-3 py-1 rounded"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              setLoading(true);
+              await cancelOrder(orderId);
+              setLoading(false);
+              toast.success("Order canceled successfully!");
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-gray-300 px-3 py-1 rounded"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ));
+  }
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
@@ -74,6 +79,7 @@ function OrderHistory() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
+
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Order History
@@ -84,9 +90,12 @@ function OrderHistory() {
         </div>
 
         <div className="space-y-4">
+
           {orders.map((order) => {
+
             const canCancel =
               order.status === "pending" || order.status === "confirmed";
+
             const isExpanded = expandedOrder === order.id;
 
             return (
@@ -94,26 +103,33 @@ function OrderHistory() {
                 key={order.id}
                 className="bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow"
               >
+
                 <div
                   className="p-6 cursor-pointer"
                   onClick={() => toggleOrderDetails(order.id)}
                 >
+
                   <div className="flex justify-between items-start">
+
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
                         Order #{order.id}
                       </h3>
+
                       <p className="text-gray-600 text-sm flex items-center">
                         <Calendar className="w-4 h-4 mr-2" />
-                        {new Date(order.createdAt).toLocaleDateString()}
+                        {new Date(order.created_at).toLocaleDateString()}
                       </p>
                     </div>
 
                     <div className="flex items-center space-x-4">
+
                       <div className="text-right">
+
                         <p className="text-xl font-bold text-gray-900">
-                          ${order.total.toFixed(2)}
+                          ${Number(order.total).toFixed(2)}
                         </p>
+
                         <span
                           className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
                             order.status === "confirmed"
@@ -126,147 +142,131 @@ function OrderHistory() {
                           {order.status}
                         </span>
                       </div>
+
                       {isExpanded ? (
                         <ChevronUp className="w-5 h-5 text-gray-400" />
                       ) : (
                         <ChevronDown className="w-5 h-5 text-gray-400" />
                       )}
+
                     </div>
                   </div>
 
-                  <div className="mt-4">
-                    <div className="flex flex-wrap gap-2">
-                      {order.items.slice(0, 3).map((item, index) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center space-x-2"
-                        >
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-8 h-8 object-cover rounded"
-                          />
-                          <span className="text-sm text-gray-600">
-                            {item.name}
-                            {index === 2 &&
-                              order.items.length > 3 &&
-                              ` +${order.items.length - 3} more`}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
 
+
                 {isExpanded && (
+
                   <div className="border-t border-gray-200 p-6">
+
                     <div className="grid md:grid-cols-2 gap-8">
+
                       <div>
+
                         <h4 className="font-semibold text-gray-900 mb-4">
                           Order Items
                         </h4>
+
                         <div className="space-y-3">
+
                           {order.items.map((item) => (
                             <div
                               key={item.id}
                               className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
                             >
+
                               <div className="flex items-center space-x-3">
-                                <img
-                                  src={item.image}
-                                  alt={item.name}
-                                  className="w-12 h-12 object-cover rounded"
-                                />
+
                                 <div>
                                   <p className="font-medium text-gray-900">
-                                    {item.name}
+                                    Product #{item.product}
                                   </p>
+
                                   <p className="text-gray-600 text-sm">
                                     Qty: {item.quantity}
                                   </p>
+
                                 </div>
+
                               </div>
+
                               <p className="font-semibold">
                                 ${(item.price * item.quantity).toFixed(2)}
                               </p>
+
                             </div>
                           ))}
+
                         </div>
+
                       </div>
 
+
                       <div className="space-y-6">
+
                         <div>
+
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                             <MapPin className="w-4 h-4 mr-2" />
                             Shipping Information
                           </h4>
+
                           <div className="bg-gray-50 rounded-lg p-4">
                             <p className="text-gray-700">
-                              {order.shippingAddress}
+                              {order.shipping_address}
                             </p>
-                            {order.customerInfo && (
-                              <div className="mt-2 text-sm text-gray-600">
-                                <p>
-                                  <strong>Name:</strong>{" "}
-                                  {order.customerInfo.name}
-                                </p>
-                                <p>
-                                  <strong>Email:</strong>{" "}
-                                  {order.customerInfo.email}
-                                </p>
-                                {order.customerInfo.phone && (
-                                  <p>
-                                    <strong>Phone:</strong>{" "}
-                                    {order.customerInfo.phone}
-                                  </p>
-                                )}
-                              </div>
-                            )}
                           </div>
+
                         </div>
 
+
                         <div>
+
                           <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                             <CreditCard className="w-4 h-4 mr-2" />
                             Payment Information
                           </h4>
+
                           <div className="bg-gray-50 rounded-lg p-4">
+
                             <div className="flex justify-between text-sm mb-1">
                               <span>Method:</span>
                               <span className="font-medium capitalize">
-                                {order.paymentMethod}
+                                {order.payment_method}
                               </span>
                             </div>
+
                             <div className="flex justify-between text-sm">
                               <span>Status:</span>
                               <span
                                 className={`font-medium ${
-                                  order.paymentStatus === "paid"
+                                  order.payment_status === "paid"
                                     ? "text-green-600"
-                                    : order.paymentStatus === "refunded"
+                                    : order.payment_status === "refunded"
                                     ? "text-blue-600"
                                     : "text-yellow-600"
                                 }`}
                               >
-                                {order.paymentStatus}
+                                {order.payment_status}
                               </span>
                             </div>
+
                           </div>
+
                         </div>
+
 
                         <div className="bg-gray-50 rounded-lg p-4">
                           <div className="flex justify-between text-lg font-semibold">
                             <span>Total Amount</span>
-                            <span>${order.total.toFixed(2)}</span>
+                            <span>${Number(order.total).toFixed(2)}</span>
                           </div>
                         </div>
 
+
                         {canCancel && (
                           <button
-                            onClick={() => {
-                               handleCancel(order.id)
-
-                            }}
+                            onClick={() => handleCancel(order.id)}
                             disabled={loading}
                             className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
                           >
@@ -274,30 +274,12 @@ function OrderHistory() {
                           </button>
                         )}
 
-                        {order.status === "cancelled" && (
-                          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                            <p className="text-red-800 font-medium">
-                              Order Cancelled
-                            </p>
-                            <p className="text-red-700 text-sm mt-1">
-                              This order has been cancelled
-                            </p>
-                          </div>
-                        )}
 
-                        {order.status === "confirmed" && (
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                            <p className="text-blue-800 font-medium">
-                              Order Confirmed
-                            </p>
-                            <p className="text-blue-700 text-sm mt-1">
-                              Your order is being processed
-                            </p>
-                          </div>
-                        )}
                       </div>
                     </div>
+
                   </div>
+
                 )}
               </div>
             );

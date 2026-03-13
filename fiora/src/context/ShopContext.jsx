@@ -60,22 +60,26 @@ export const ShopProvider = ({ children }) => {
 
 
   const updateCartQuantity = async (productId, quantity) => {
-    if (!user) return;
+  if (!user) return;
 
-    try {
-      if (quantity < 1) {
-        await removeCart(productId);
-      } else {
-        await decreaseCart(productId);
-      }
+  const currentItem = cart.find((item) => item.product.id === productId);
 
-      fetchCart();
-    } catch {
-      toast.error("Failed to update quantity");
+  try {
+    if (quantity < 1) {
+      await removeCart(productId);
+    } 
+    else if (quantity > currentItem.quantity) {
+      await AddToCart(productId);   // increase
+    } 
+    else {
+      await decreaseCart(productId); // decrease
     }
-  };
 
-
+    fetchCart();
+  } catch {
+    toast.error("Failed to update quantity");
+  }
+};
 
   const removeFromCart = async (productId) => {
     if (!user) return;

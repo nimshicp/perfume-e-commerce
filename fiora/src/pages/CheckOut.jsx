@@ -11,9 +11,10 @@ function CheckOut() {
   const { user } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    name: user.name || "",
-    email: user.email || "",
+    name: user?.name || "",
+    email: user?.email || "",
     address: "",
     city: "",
     pinCode: "",
@@ -28,23 +29,18 @@ function CheckOut() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(), setLoading(true);
-    try {
-      const orderData = {
-        shippingAddress: `${formData.address},${formData.city},${formData.pinCode}`,
-        customerInfo: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-        },
-      };
+    e.preventDefault();
+    setLoading(true);
 
-      const order = await createOrder(orderData, cart, cartTotal);
+    try {
+      const order = await createOrder(formData, cart, cartTotal);
+
       if (order) {
+        toast.success("Continue to payment");
         navigate(`/payment/${order.id}`);
       }
     } catch (err) {
-      alert("failed to create order");
+      toast.error("Failed to create order");
     } finally {
       setLoading(false);
     }
@@ -85,6 +81,7 @@ function CheckOut() {
                   className="w-full p-3 border border-gray-300 rounded-lg"
                   required
                 />
+
                 <input
                   type="email"
                   name="email"
@@ -94,6 +91,7 @@ function CheckOut() {
                   className="w-full p-3 border border-gray-300 rounded-lg"
                   required
                 />
+
                 <input
                   type="text"
                   name="phone"
@@ -103,6 +101,7 @@ function CheckOut() {
                   className="w-full p-3 border border-gray-300 rounded-lg"
                   required
                 />
+
                 <input
                   type="text"
                   name="address"
@@ -112,6 +111,7 @@ function CheckOut() {
                   className="w-full p-3 border border-gray-300 rounded-lg"
                   required
                 />
+
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="text"
@@ -122,6 +122,7 @@ function CheckOut() {
                     className="p-3 border border-gray-300 rounded-lg"
                     required
                   />
+
                   <input
                     type="text"
                     name="pinCode"
@@ -138,7 +139,6 @@ function CheckOut() {
                 type="submit"
                 disabled={loading}
                 className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 disabled:opacity-50"
-                onClick={() => toast.success("continue payment")}
               >
                 {loading
                   ? "Creating Order..."
@@ -149,6 +149,7 @@ function CheckOut() {
 
           <div className="bg-white rounded-lg shadow-sm p-6 h-fit">
             <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
+
             <div className="space-y-4">
               {cart.map((item) => (
                 <div
@@ -157,17 +158,20 @@ function CheckOut() {
                 >
                   <div className="flex items-center space-x-3">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={item.product?.image}
+                      alt={item.product?.name}
                       className="w-12 h-12 object-cover rounded"
                     />
+
                     <div>
-                      <p className="font-medium">{item.name}</p>
+                      <p className="font-medium">{item.product?.name}</p>
                       <p className="text-gray-600">Qty: {item.quantity}</p>
                     </div>
                   </div>
+
                   <p className="font-semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    $
+                    {(item.product?.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -180,6 +184,7 @@ function CheckOut() {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
