@@ -11,3 +11,9 @@ export const loginUser = (data) => {
 export const getProfile = () => {
   return api.get("users/me/");
 };
+
+export const googleLogin = (token) => {
+  return api.post("users/google-login/", {
+    token: token,
+  });
+};

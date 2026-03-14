@@ -1,18 +1,20 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import GoogleLoginButton from "../components/GoogleLoginButton"; // ✅ added
 
 const Login = () => {
 
     const navigate =useNavigate()
     const {login,user} = useUser()
+
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
     password: "",
   });
-
 
   const [errors, setErrors] = useState({});
 
@@ -33,13 +35,11 @@ const Login = () => {
     }));
   };
 
-
 useEffect(() => {
     if (user) {
       navigate("/");
     }
   }, [user, navigate]);
-
 
 const handleSubmit = async (e) => {
 
@@ -62,7 +62,6 @@ const handleSubmit = async (e) => {
   }
 
 };
-
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -123,6 +122,13 @@ const handleSubmit = async (e) => {
             </button>
           </form>
 
+          {/* ✅ Google Login Section (added) */}
+          <div className="my-6 text-center text-gray-500">OR</div>
+
+          <div className="flex justify-center">
+            <GoogleLoginButton />
+          </div>
+
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}
@@ -134,6 +140,7 @@ const handleSubmit = async (e) => {
               </Link>
             </p>
           </div>
+
         </div>
       </div>
     </div>
@@ -141,3 +148,4 @@ const handleSubmit = async (e) => {
 };
 
 export default Login;
+

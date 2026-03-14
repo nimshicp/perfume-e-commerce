@@ -58,7 +58,7 @@ function Profile() {
               <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User size={32} className="text-gray-700" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-1">{user.Username}</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-1">{user.username}</h2>
               <p className="text-gray-500 text-sm">Member since 2024</p>
             </div>
 
